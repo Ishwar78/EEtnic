@@ -473,20 +473,32 @@ export default function ProductDetail() {
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {product.sizes.map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => setSelectedSize(size)}
-                          className={cn(
-                            "h-12 min-w-[48px] px-4 rounded-md border-2 font-medium transition-all",
-                            selectedSize === size
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border hover:border-primary"
-                          )}
-                        >
-                          {size}
-                        </button>
-                      ))}
+                      {product.sizes.map((size) => {
+                        const outOfStock = isSizeOutOfStock(product, size);
+                        return (
+                          <div key={size} className="relative">
+                            <button
+                              onClick={() => !outOfStock && setSelectedSize(size)}
+                              disabled={outOfStock}
+                              className={cn(
+                                "h-12 min-w-[48px] px-4 rounded-md border-2 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                selectedSize === size
+                                  ? "border-primary bg-primary text-primary-foreground"
+                                  : outOfStock
+                                  ? "border-destructive/50 text-destructive/50"
+                                  : "border-border hover:border-primary"
+                              )}
+                            >
+                              {size}
+                            </button>
+                            {outOfStock && (
+                              <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded whitespace-nowrap">
+                                Out of Stock
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
