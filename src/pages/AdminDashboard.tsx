@@ -583,6 +583,11 @@ export default function AdminDashboard() {
               <AdminInvoiceManagement />
             </TabsContent>
 
+            {/* Transactions Tab */}
+            <TabsContent value="transactions" className="space-y-6">
+              <AdminTransactionManagement />
+            </TabsContent>
+
             {/* Size Charts Tab */}
             <TabsContent value="size-charts" className="space-y-6">
               <SizeChartManagement />
