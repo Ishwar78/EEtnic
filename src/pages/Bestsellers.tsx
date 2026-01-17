@@ -42,6 +42,7 @@ export default function Bestsellers() {
       metaDescription="Shop our bestselling ethnic wear collection. Customer favorites with premium quality and stunning designs. Free shipping above ₹999."
       products={bestsellers}
       showTrending
+      bannerImage="https://images.unsplash.com/photo-1595777712802-14b700b0535e?w=1600&q=80&fit=crop"
       bannerBgColor="bg-gradient-to-br from-primary/15 via-accent/5 to-background"
     />
   );
