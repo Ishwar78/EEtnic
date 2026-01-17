@@ -236,6 +236,7 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
         sizes,
         colors,
         stock,
+        stockBySize,
         rating,
         isActive,
         isNew,
