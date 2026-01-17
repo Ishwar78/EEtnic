@@ -143,6 +143,7 @@ export default function ProductManagement() {
       description: "",
       image: product.image,
       images: existingImages,
+      stockBySize: product.stockBySize || [],
     });
     setImagePreview(product.image);
     setImagePreviews(existingImages);
