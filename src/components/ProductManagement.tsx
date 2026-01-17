@@ -695,15 +695,67 @@ export default function ProductManagement() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Sizes (comma separated)</Label>
-                <Input
-                  value={formData.sizes}
-                  onChange={(e) => setFormData({ ...formData, sizes: e.target.value })}
-                  placeholder="S, M, L, XL"
-                />
+            <div className="space-y-2">
+              <Label>Sizes (comma separated)</Label>
+              <Input
+                value={formData.sizes}
+                onChange={(e) => {
+                  const newSizes = e.target.value
+                    .split(",")
+                    .map(s => s.trim().toUpperCase())
+                    .filter(s => s);
+                  setFormData({ ...formData, sizes: e.target.value });
+
+                  // Auto-update stockBySize when sizes change
+                  const updatedStockBySize = newSizes.map(size => {
+                    const existing = formData.stockBySize.find(sb => sb.size === size);
+                    return existing || { size, quantity: "" };
+                  });
+                  setFormData(prev => ({ ...prev, stockBySize: updatedStockBySize }));
+                }}
+                placeholder="S, M, L, XL"
+              />
+            </div>
+
+            {/* Stock by Size Section */}
+            <div className="space-y-3 p-4 bg-muted/50 rounded-lg border border-border">
+              <Label className="font-semibold">Stock by Size</Label>
+              <p className="text-xs text-muted-foreground">Add quantity for each size. Set to 0 to mark as out of stock.</p>
+              <div className="grid grid-cols-2 gap-3">
+                {formData.sizes
+                  .split(",")
+                  .map(s => s.trim().toUpperCase())
+                  .filter(s => s)
+                  .map((size) => (
+                    <div key={size} className="space-y-1">
+                      <Label htmlFor={`stock-${size}`} className="text-xs">{size}</Label>
+                      <Input
+                        id={`stock-${size}`}
+                        type="number"
+                        min="0"
+                        value={
+                          formData.stockBySize.find(sb => sb.size === size)?.quantity || ""
+                        }
+                        onChange={(e) => {
+                          const updated = [...formData.stockBySize];
+                          const index = updated.findIndex(sb => sb.size === size);
+                          if (index >= 0) {
+                            updated[index].quantity = e.target.value;
+                          } else {
+                            updated.push({ size, quantity: e.target.value });
+                          }
+                          setFormData({ ...formData, stockBySize: updated });
+                        }}
+                        placeholder="0"
+                        className="text-center"
+                      />
+                    </div>
+                  ))}
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div></div>
               <div className="space-y-2">
                 <Label>Colors</Label>
                 <div className="space-y-2">
