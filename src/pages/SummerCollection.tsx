@@ -37,11 +37,12 @@ export default function SummerCollection() {
     <CollectionLayout
       title="Summer Collection"
       subtitle="Light • Breezy • Comfortable"
-      tagline="Stay cool in style this summer"
+      tagline="Stay Cool in Style This Summer"
       metaTitle="Summer Collection | Vasstra - Light & Breezy Fashion"
       metaDescription="Shop our summer collection. Light fabrics, bright colors, and breathable outfits perfect for the season. Free shipping above ₹999."
       products={summerProducts}
-      heroBg="bg-gradient-to-b from-yellow-100/50 to-background"
+      bannerImage="https://images.unsplash.com/photo-1490481651971-daf3e7b5ca75?w=1600&q=80&fit=crop"
+      bannerBgColor="bg-gradient-to-br from-yellow/15 via-accent/5 to-background"
     />
   );
 }

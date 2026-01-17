@@ -51,12 +51,14 @@ export default function EthnicWear() {
   return (
     <CollectionLayout
       title="Ethnic Wear Collection"
-      subtitle="Timeless elegance meets contemporary design"
+      subtitle="Timeless Elegance Meets Contemporary Design"
+      tagline="Traditional Fashion Reimagined"
       metaTitle="Ethnic Wear | Vasstra - Premium Indian Fashion"
       metaDescription="Explore our exclusive ethnic wear collection. Shop kurta sets, anarkali suits, lehengas, and festive wear with free shipping above ₹999."
       products={ethnicProducts}
       filterCategories={filterCategories}
-      heroBg="bg-gradient-to-b from-primary/10 to-background"
+      bannerImage="https://images.unsplash.com/photo-1610706406159-b21bd25c5e9c?w=1600&q=80&fit=crop"
+      bannerBgColor="bg-gradient-to-br from-burgundy/15 via-gold/5 to-background"
     />
   );
 }

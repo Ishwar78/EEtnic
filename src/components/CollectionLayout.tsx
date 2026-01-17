@@ -5,6 +5,7 @@ import { Filter, Grid3X3, LayoutGrid } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CollectionBanner from "@/components/CollectionBanner";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -21,6 +22,9 @@ interface CollectionLayoutProps {
   showTrending?: boolean;
   filterCategories?: string[];
   heroBg?: string;
+  bannerImage?: string;
+  bannerBgColor?: string;
+  bannerTextColor?: string;
 }
 
 export default function CollectionLayout({
@@ -33,6 +37,9 @@ export default function CollectionLayout({
   showTrending = false,
   filterCategories = [],
   heroBg = "bg-muted/30",
+  bannerImage,
+  bannerBgColor,
+  bannerTextColor,
 }: CollectionLayoutProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [gridCols, setGridCols] = useState<3 | 4>(4);
@@ -72,35 +79,19 @@ export default function CollectionLayout({
       <div className="min-h-screen bg-background">
         <Header />
 
-        <main className="pt-24 pb-16">
-          {/* Hero Banner */}
-          <div className={cn("py-12 md:py-16", heroBg)}>
-            <div className="container mx-auto px-4 text-center">
-              <nav className="text-sm text-muted-foreground mb-4 flex items-center justify-center gap-2">
-                <Link to="/" className="hover:text-primary">Home</Link>
-                <span>/</span>
-                <span className="text-foreground">{title}</span>
-              </nav>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
-                {title}
-              </h1>
-              {subtitle && (
-                <p className="text-lg md:text-xl text-muted-foreground mt-3 max-w-2xl mx-auto">
-                  {subtitle}
-                </p>
-              )}
-              {tagline && (
-                <p className="text-gold font-medium mt-4 text-lg tracking-wide">
-                  {tagline}
-                </p>
-              )}
-              <p className="text-muted-foreground mt-4">
-                {sortedProducts.length} products found
-              </p>
-            </div>
-          </div>
+        <main className="pt-24">
+          {/* Collection Banner */}
+          <CollectionBanner
+            title={title}
+            subtitle={subtitle}
+            tagline={tagline}
+            backgroundImage={bannerImage}
+            backgroundColor={bannerBgColor}
+            textColor={bannerTextColor}
+            productCount={sortedProducts.length}
+          />
 
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-12 md:py-16">
             <div className="flex flex-col lg:flex-row gap-8">
               {/* Filters Sidebar */}
               <aside className={cn(

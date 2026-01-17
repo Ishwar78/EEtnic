@@ -158,7 +158,7 @@ function ProductCard({ product, index }: ProductCardProps) {
   );
 }
 
-export default function FeaturedProducts() {
+export default function TrendingProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -169,7 +169,7 @@ export default function FeaturedProducts() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-        const response = await fetch(`${API_URL}/products?limit=8`, {
+        const response = await fetch(`${API_URL}/products?limit=12`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -185,14 +185,14 @@ export default function FeaturedProducts() {
 
         const data = await response.json();
         if (data.success && data.products) {
-          const normalizedProducts = (data.products || []).slice(0, 8).map((p: any) => normalizeProduct(p));
+          const normalizedProducts = (data.products || []).slice(0, 12).map((p: any) => normalizeProduct(p));
           setProducts(normalizedProducts);
         }
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
-          console.warn('Featured products fetch timeout');
+          console.warn('Trending products fetch timeout');
         } else {
-          console.error('Error fetching products:', error instanceof Error ? error.message : error);
+          console.error('Error fetching trending products:', error instanceof Error ? error.message : error);
         }
       } finally {
         setIsLoading(false);
@@ -203,22 +203,22 @@ export default function FeaturedProducts() {
   }, []);
 
   return (
-    <section className="py-20">
+    <section className="py-16 bg-cream/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <span className="text-gold font-medium tracking-widest uppercase text-sm">
-            Curated for You
+        <div className="text-center mb-12">
+          <span className="text-primary font-medium tracking-widest text-sm uppercase mb-2 block">
+            Trending Collection
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-2 mb-4">
-            Featured Products
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
+            New Arrivals
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Handpicked styles that define elegance and tradition
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Discover the latest and most sought-after pieces from our admin collection
           </p>
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-16">
+          <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : products.length === 0 ? (
@@ -226,19 +226,11 @@ export default function FeaturedProducts() {
             <p className="text-muted-foreground">No products available yet. Check back soon!</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {products.map((product, index) => (
-                <ProductCard key={product._id || product.id} product={product} index={index} />
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/shop">View All Products</Link>
-              </Button>
-            </div>
-          </>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {products.map((product, index) => (
+              <ProductCard key={product._id || product.id} product={product} index={index} />
+            ))}
+          </div>
         )}
       </div>
     </section>

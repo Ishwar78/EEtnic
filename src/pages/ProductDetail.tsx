@@ -502,11 +502,11 @@ export default function ProductDetail() {
                         Size Guide
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-4">
                       {product.sizes.map((size) => {
                         const outOfStock = isSizeOutOfStock(product, size);
                         return (
-                          <div key={size} className="relative">
+                          <div key={size} className="flex flex-col items-center gap-2">
                             <button
                               onClick={() => !outOfStock && setSelectedSize(size)}
                               disabled={outOfStock}
@@ -522,7 +522,7 @@ export default function ProductDetail() {
                               {size}
                             </button>
                             {outOfStock && (
-                              <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded whitespace-nowrap">
+                              <span className="text-xs font-semibold text-destructive whitespace-nowrap">
                                 Out of Stock
                               </span>
                             )}
