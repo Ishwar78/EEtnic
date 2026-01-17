@@ -57,6 +57,7 @@ export default function WesternWear() {
       metaDescription="Shop our western wear collection. Trendy tops, dresses, co-ord sets, and casual wear. Free shipping above ₹999."
       products={westernProducts}
       filterCategories={filterCategories}
+      bannerImage="https://images.unsplash.com/photo-1595592834986-c67ee1dbe3d5?w=1600&q=80&fit=crop"
       bannerBgColor="bg-gradient-to-br from-secondary/15 via-accent/5 to-background"
     />
   );
