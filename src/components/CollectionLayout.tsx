@@ -88,7 +88,7 @@ export default function CollectionLayout({
             productCount={sortedProducts.length}
           />
 
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-12 md:py-16">
             <div className="flex flex-col lg:flex-row gap-8">
               {/* Filters Sidebar */}
               <aside className={cn(
