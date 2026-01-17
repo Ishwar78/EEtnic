@@ -87,6 +87,7 @@ export default function CollectionLayout({
             tagline={tagline}
             backgroundImage={bannerImage}
             backgroundColor={bannerBgColor}
+            textColor={bannerTextColor}
             productCount={sortedProducts.length}
           />
 
