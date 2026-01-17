@@ -51,12 +51,13 @@ export default function WesternWear() {
   return (
     <CollectionLayout
       title="Modern Western Styles"
-      subtitle="Contemporary fashion for the modern woman"
+      subtitle="Contemporary Fashion for the Modern Woman"
+      tagline="Modern Elegance"
       metaTitle="Western Wear | Vasstra - Modern Fashion"
       metaDescription="Shop our western wear collection. Trendy tops, dresses, co-ord sets, and casual wear. Free shipping above ₹999."
       products={westernProducts}
       filterCategories={filterCategories}
-      heroBg="bg-gradient-to-b from-secondary/10 to-background"
+      bannerBgColor="bg-gradient-to-br from-secondary/15 via-accent/5 to-background"
     />
   );
 }
