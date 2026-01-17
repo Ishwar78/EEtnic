@@ -264,6 +264,20 @@ export default function ProductDetail() {
   const handleBuyNow = () => {
     if (!product) return;
 
+    // Check if size is required and selected
+    if (product.sizes && product.sizes.length > 0) {
+      if (!selectedSize) {
+        toast.error("Please select a size");
+        return;
+      }
+
+      // Check if selected size is out of stock
+      if (isSizeOutOfStock(product, selectedSize)) {
+        toast.error(`Size ${selectedSize} is out of stock`);
+        return;
+      }
+    }
+
     // Check if color is required and selected
     if (product.colors && product.colors.length > 0 && !selectedColor) {
       toast.error("Please select a color");
