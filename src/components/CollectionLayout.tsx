@@ -36,6 +36,8 @@ export default function CollectionLayout({
   showTrending = false,
   filterCategories = [],
   heroBg = "bg-muted/30",
+  bannerImage,
+  bannerBgColor,
 }: CollectionLayoutProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [gridCols, setGridCols] = useState<3 | 4>(4);
