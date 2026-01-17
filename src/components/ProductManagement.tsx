@@ -32,6 +32,7 @@ interface Product {
   isSummer?: boolean;
   isWinter?: boolean;
   stock?: number;
+  stockBySize?: Array<{ size: string; quantity: number }>;
   isActive?: boolean;
 }
 
