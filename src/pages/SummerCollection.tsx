@@ -41,6 +41,7 @@ export default function SummerCollection() {
       metaTitle="Summer Collection | Vasstra - Light & Breezy Fashion"
       metaDescription="Shop our summer collection. Light fabrics, bright colors, and breathable outfits perfect for the season. Free shipping above ₹999."
       products={summerProducts}
+      bannerImage="https://images.unsplash.com/photo-1490481651971-daf3e7b5ca75?w=1600&q=80&fit=crop"
       bannerBgColor="bg-gradient-to-br from-yellow/15 via-accent/5 to-background"
     />
   );
