@@ -247,6 +247,15 @@ export default function ProductManagement() {
         .map(c => c.trim())
         .filter(c => c);
 
+      // Build stockBySize from form data
+      const stockBySize = sizes.map(size => {
+        const existing = formData.stockBySize.find(sb => sb.size === size);
+        return {
+          size,
+          quantity: existing ? parseInt(existing.quantity.toString()) || 0 : 0
+        };
+      });
+
       const payload = {
         name: formData.name,
         price: parseFloat(formData.price),
@@ -256,6 +265,7 @@ export default function ProductManagement() {
         images: formData.images.length > 0 ? formData.images : [formData.image],
         sizes,
         colors,
+        stockBySize,
         description: formData.description || formData.name,
         isNew: formData.isNew || false,
         isBestseller: formData.isBestseller || false,
