@@ -592,10 +592,27 @@ export default function ProductDetail() {
                   </div>
                 </div>
 
+                {/* Stock Status Message */}
+                {product.sizes && product.sizes.length > 0 && selectedSize && isSizeOutOfStock(product, selectedSize) && (
+                  <div className="p-3 bg-destructive/10 border border-destructive/30 rounded-lg">
+                    <p className="text-sm font-medium text-destructive">
+                      Size {selectedSize} is currently out of stock
+                    </p>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-3">
-                    <Button variant="gold" size="xl" className="flex-1 gap-2" onClick={handleAddToCart}>
+                    <Button
+                      variant="gold"
+                      size="xl"
+                      className="flex-1 gap-2"
+                      onClick={handleAddToCart}
+                      disabled={
+                        (product.sizes && product.sizes.length > 0 && (!selectedSize || isSizeOutOfStock(product, selectedSize)))
+                      }
+                    >
                       <ShoppingBag className="h-5 w-5" />
                       Add to Cart
                     </Button>
@@ -611,7 +628,15 @@ export default function ProductDetail() {
                       <Share2 className="h-5 w-5" />
                     </Button>
                   </div>
-                  <Button variant="hero" size="xl" className="w-full" onClick={handleBuyNow}>
+                  <Button
+                    variant="hero"
+                    size="xl"
+                    className="w-full"
+                    onClick={handleBuyNow}
+                    disabled={
+                      (product.sizes && product.sizes.length > 0 && (!selectedSize || isSizeOutOfStock(product, selectedSize)))
+                    }
+                  >
                     Buy It Now
                   </Button>
                 </div>
