@@ -153,6 +153,7 @@ export default function ProductManagement() {
 
   const handleAdd = () => {
     setSelectedProduct(null);
+    const defaultSizes = ["S", "M", "L", "XL"];
     setFormData({
       name: "",
       price: "",
@@ -168,6 +169,7 @@ export default function ProductManagement() {
       description: "",
       image: "",
       images: [],
+      stockBySize: defaultSizes.map(size => ({ size, quantity: "" })),
     });
     setImagePreview("");
     setImagePreviews([]);
