@@ -24,6 +24,7 @@ interface CollectionLayoutProps {
   heroBg?: string;
   bannerImage?: string;
   bannerBgColor?: string;
+  bannerTextColor?: string;
 }
 
 export default function CollectionLayout({
