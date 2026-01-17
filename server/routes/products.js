@@ -129,6 +129,7 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
       sizes,
       colors,
       stock,
+      stockBySize,
       rating,
       isNew,
       isBestseller,
