@@ -22,20 +22,27 @@ export default function CollectionBanner({
 }: CollectionBannerProps) {
   return (
     <div
-      className={cn(
-        "relative py-16 md:py-24 overflow-hidden",
-        backgroundColor
-      )}
+      className="relative py-20 md:py-32 overflow-hidden min-h-96"
       style={backgroundImage ? {
-        backgroundImage: `linear-gradient(135deg, rgba(122, 33, 57, 0.08) 0%, rgba(201, 162, 39, 0.05) 100%), url('${backgroundImage}')`,
+        backgroundImage: `url('${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
       } : undefined}
     >
+      {/* Background Color Fallback */}
+      {!backgroundImage && <div className={cn("absolute inset-0", backgroundColor)} />}
+
+      {/* Overlay - For text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/30" />
+
       {/* Decorative Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      {!backgroundImage && (
+        <>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        </>
+      )}
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
