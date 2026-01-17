@@ -48,25 +48,48 @@ export default function CollectionBanner({
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center">
           {/* Breadcrumb */}
-          <nav className="text-sm text-muted-foreground mb-4 md:mb-6 flex items-center justify-center gap-2">
-            <Link to="/" className="hover:text-primary transition-colors">
+          <nav className={cn(
+            "text-sm mb-4 md:mb-6 flex items-center justify-center gap-2 transition-colors",
+            backgroundImage
+              ? "text-white/70"
+              : "text-muted-foreground"
+          )}>
+            <Link
+              to="/"
+              className={cn(
+                "hover:transition-colors",
+                backgroundImage
+                  ? "text-white/80 hover:text-white"
+                  : "hover:text-primary"
+              )}
+            >
               Home
             </Link>
             <span>/</span>
-            <span className={cn("font-medium", textColor)}>{title}</span>
+            <span className={cn(
+              "font-medium",
+              backgroundImage ? "text-white/90" : textColor
+            )}>
+              {title}
+            </span>
           </nav>
 
           {/* Main Title */}
           <h1 className={cn(
             "font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6",
-            textColor
+            backgroundImage ? "text-white drop-shadow-lg" : textColor
           )}>
             {title}
           </h1>
 
           {/* Subtitle */}
           {subtitle && (
-            <p className="text-lg md:text-2xl text-muted-foreground mb-3 max-w-3xl mx-auto">
+            <p className={cn(
+              "text-lg md:text-2xl mb-3 max-w-3xl mx-auto",
+              backgroundImage
+                ? "text-white/90 drop-shadow-md"
+                : "text-muted-foreground"
+            )}>
               {subtitle}
             </p>
           )}
@@ -74,18 +97,44 @@ export default function CollectionBanner({
           {/* Tagline */}
           {tagline && (
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="h-1 w-12 bg-gold rounded-full" />
-              <p className="text-gold font-medium text-lg tracking-wide">
+              <div className={cn(
+                "h-1 w-12 rounded-full",
+                backgroundImage ? "bg-gold/80" : "bg-gold"
+              )} />
+              <p className={cn(
+                "font-medium text-lg tracking-wide",
+                backgroundImage
+                  ? "text-gold/90 drop-shadow"
+                  : "text-gold"
+              )}>
                 {tagline}
               </p>
-              <div className="h-1 w-12 bg-gold rounded-full" />
+              <div className={cn(
+                "h-1 w-12 rounded-full",
+                backgroundImage ? "bg-gold/80" : "bg-gold"
+              )} />
             </div>
           )}
 
           {/* Product Count */}
-          <div className="inline-block mt-6 md:mt-8 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-            <p className="text-sm md:text-base text-muted-foreground">
-              <span className="font-semibold text-foreground">{productCount}</span> exquisite pieces
+          <div className={cn(
+            "inline-block mt-6 md:mt-8 px-6 py-3 rounded-full backdrop-blur-sm border transition-all",
+            backgroundImage
+              ? "bg-white/15 border-white/30 hover:bg-white/20"
+              : "bg-white/10 border-white/20"
+          )}>
+            <p className={cn(
+              "text-sm md:text-base",
+              backgroundImage
+                ? "text-white/90"
+                : "text-muted-foreground"
+            )}>
+              <span className={cn(
+                "font-semibold",
+                backgroundImage ? "text-white" : "text-foreground"
+              )}>
+                {productCount}
+              </span> exquisite pieces
             </p>
           </div>
         </div>
