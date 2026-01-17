@@ -5,6 +5,7 @@ import { Filter, Grid3X3, LayoutGrid } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CollectionBanner from "@/components/CollectionBanner";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
