@@ -63,6 +63,16 @@ function getColorHex(colorName: string): string | null {
   return null;
 }
 
+function getSizeStock(product: Product | null, size: string): number {
+  if (!product || !product.stockBySize) return 0;
+  const sizeStock = product.stockBySize.find(s => s.size === size);
+  return sizeStock ? sizeStock.quantity : 0;
+}
+
+function isSizeOutOfStock(product: Product | null, size: string): boolean {
+  return getSizeStock(product, size) === 0;
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
