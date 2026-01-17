@@ -166,19 +166,34 @@ export default function TrendingProducts() {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_URL}/products?limit=12`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        const response = await fetch(`${API_URL}/products?limit=12`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`API Error: ${response.status}`);
         }
 
         const data = await response.json();
-        if (data.success) {
+        if (data.success && data.products) {
           const normalizedProducts = (data.products || []).slice(0, 12).map((p: any) => normalizeProduct(p));
           setProducts(normalizedProducts);
         }
       } catch (error) {
-        console.error('Error fetching trending products:', error);
+        if (error instanceof Error && error.name === 'AbortError') {
+          console.warn('Trending products fetch timeout');
+        } else {
+          console.error('Error fetching trending products:', error instanceof Error ? error.message : error);
+        }
       } finally {
         setIsLoading(false);
       }
