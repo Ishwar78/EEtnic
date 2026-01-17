@@ -37,11 +37,12 @@ export default function Bestsellers() {
     <CollectionLayout
       title="Bestsellers"
       subtitle="Bestselling Outfits Loved by Customers"
+      tagline="Customer Favorites"
       metaTitle="Bestsellers | Vasstra - Top Selling Ethnic Fashion"
       metaDescription="Shop our bestselling ethnic wear collection. Customer favorites with premium quality and stunning designs. Free shipping above ₹999."
       products={bestsellers}
       showTrending
-      heroBg="bg-gradient-to-b from-primary/5 to-background"
+      bannerBgColor="bg-gradient-to-br from-primary/15 via-accent/5 to-background"
     />
   );
 }
