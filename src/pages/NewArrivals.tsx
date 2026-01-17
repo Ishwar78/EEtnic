@@ -57,6 +57,7 @@ export default function NewArrivals() {
       metaDescription="Explore our new arrivals - freshly curated ethnic wear collection with latest designs and trends"
       products={products}
       filterCategories={[]}
+      bannerImage="https://images.unsplash.com/photo-1626327957914-28bfbf68a57d?w=1600&q=80&fit=crop"
       bannerBgColor="bg-gradient-to-br from-gold/15 via-accent/5 to-background"
     />
   );
