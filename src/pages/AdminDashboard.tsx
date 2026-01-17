@@ -30,6 +30,7 @@ import PaymentManagement from "@/components/PaymentManagement";
 import SizeChartManagement from "@/components/SizeChartManagement";
 import InvoiceDisplay from "@/components/InvoiceDisplay";
 import AdminInvoiceManagement from "@/components/AdminInvoiceManagement";
+import AdminTransactionManagement from "@/components/AdminTransactionManagement";
 
 interface DashboardStats {
   totalUsers: number;
