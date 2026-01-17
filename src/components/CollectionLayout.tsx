@@ -22,6 +22,8 @@ interface CollectionLayoutProps {
   showTrending?: boolean;
   filterCategories?: string[];
   heroBg?: string;
+  bannerImage?: string;
+  bannerBgColor?: string;
 }
 
 export default function CollectionLayout({
