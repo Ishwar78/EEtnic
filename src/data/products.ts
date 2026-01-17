@@ -20,6 +20,7 @@ export interface Product {
   isWinter?: boolean;
   description?: string;
   stock?: number;
+  stockBySize?: Array<{ size: string; quantity: number }>;
   isActive?: boolean;
   createdAt?: string;
   rating?: number;

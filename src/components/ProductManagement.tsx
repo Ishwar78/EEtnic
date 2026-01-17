@@ -32,6 +32,7 @@ interface Product {
   isSummer?: boolean;
   isWinter?: boolean;
   stock?: number;
+  stockBySize?: Array<{ size: string; quantity: number }>;
   isActive?: boolean;
 }
 
@@ -69,6 +70,7 @@ export default function ProductManagement() {
     description: "",
     image: "",
     images: [] as string[],
+    stockBySize: [] as Array<{ size: string; quantity: number | string }>,
   });
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -141,6 +143,7 @@ export default function ProductManagement() {
       description: "",
       image: product.image,
       images: existingImages,
+      stockBySize: product.stockBySize || [],
     });
     setImagePreview(product.image);
     setImagePreviews(existingImages);
@@ -150,6 +153,7 @@ export default function ProductManagement() {
 
   const handleAdd = () => {
     setSelectedProduct(null);
+    const defaultSizes = ["S", "M", "L", "XL"];
     setFormData({
       name: "",
       price: "",
@@ -165,6 +169,7 @@ export default function ProductManagement() {
       description: "",
       image: "",
       images: [],
+      stockBySize: defaultSizes.map(size => ({ size, quantity: "" })),
     });
     setImagePreview("");
     setImagePreviews([]);
@@ -242,6 +247,15 @@ export default function ProductManagement() {
         .map(c => c.trim())
         .filter(c => c);
 
+      // Build stockBySize from form data
+      const stockBySize = sizes.map(size => {
+        const existing = formData.stockBySize.find(sb => sb.size === size);
+        return {
+          size,
+          quantity: existing ? parseInt(existing.quantity.toString()) || 0 : 0
+        };
+      });
+
       const payload = {
         name: formData.name,
         price: parseFloat(formData.price),
@@ -251,6 +265,7 @@ export default function ProductManagement() {
         images: formData.images.length > 0 ? formData.images : [formData.image],
         sizes,
         colors,
+        stockBySize,
         description: formData.description || formData.name,
         isNew: formData.isNew || false,
         isBestseller: formData.isBestseller || false,
@@ -680,83 +695,132 @@ export default function ProductManagement() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Sizes (comma separated)</Label>
-                <Input
-                  value={formData.sizes}
-                  onChange={(e) => setFormData({ ...formData, sizes: e.target.value })}
-                  placeholder="S, M, L, XL"
-                />
+            <div className="space-y-2">
+              <Label>Sizes (comma separated)</Label>
+              <Input
+                value={formData.sizes}
+                onChange={(e) => {
+                  const newSizes = e.target.value
+                    .split(",")
+                    .map(s => s.trim().toUpperCase())
+                    .filter(s => s);
+                  setFormData({ ...formData, sizes: e.target.value });
+
+                  // Auto-update stockBySize when sizes change
+                  const updatedStockBySize = newSizes.map(size => {
+                    const existing = formData.stockBySize.find(sb => sb.size === size);
+                    return existing || { size, quantity: "" };
+                  });
+                  setFormData(prev => ({ ...prev, stockBySize: updatedStockBySize }));
+                }}
+                placeholder="S, M, L, XL"
+              />
+            </div>
+
+            {/* Stock by Size Section */}
+            <div className="space-y-3 p-4 bg-muted/50 rounded-lg border border-border">
+              <Label className="font-semibold">Stock by Size</Label>
+              <p className="text-xs text-muted-foreground">Add quantity for each size. Set to 0 to mark as out of stock.</p>
+              <div className="grid grid-cols-2 gap-3">
+                {formData.sizes
+                  .split(",")
+                  .map(s => s.trim().toUpperCase())
+                  .filter(s => s)
+                  .map((size) => (
+                    <div key={size} className="space-y-1">
+                      <Label htmlFor={`stock-${size}`} className="text-xs">{size}</Label>
+                      <Input
+                        id={`stock-${size}`}
+                        type="number"
+                        min="0"
+                        value={
+                          formData.stockBySize.find(sb => sb.size === size)?.quantity || ""
+                        }
+                        onChange={(e) => {
+                          const updated = [...formData.stockBySize];
+                          const index = updated.findIndex(sb => sb.size === size);
+                          if (index >= 0) {
+                            updated[index].quantity = e.target.value;
+                          } else {
+                            updated.push({ size, quantity: e.target.value });
+                          }
+                          setFormData({ ...formData, stockBySize: updated });
+                        }}
+                        placeholder="0"
+                        className="text-center"
+                      />
+                    </div>
+                  ))}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Colors</Label>
               <div className="space-y-2">
-                <Label>Colors</Label>
-                <div className="space-y-2">
-                  <div className="flex flex-wrap gap-2 p-3 border rounded-md border-border bg-muted/30 min-h-[44px]">
-                    {formData.colors.split(",").map((color) => {
-                      const trimmedColor = color.trim();
-                      return trimmedColor ? (
-                        <span
-                          key={trimmedColor}
-                          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium"
+                <div className="flex flex-wrap gap-2 p-3 border rounded-md border-border bg-muted/30 min-h-[44px]">
+                  {formData.colors.split(",").map((color) => {
+                    const trimmedColor = color.trim();
+                    return trimmedColor ? (
+                      <span
+                        key={trimmedColor}
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium"
+                      >
+                        {trimmedColor}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const colors = formData.colors
+                              .split(",")
+                              .map(c => c.trim())
+                              .filter(c => c && c !== trimmedColor)
+                              .join(", ");
+                            setFormData({ ...formData, colors });
+                          }}
+                          className="hover:opacity-70"
                         >
-                          {trimmedColor}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const colors = formData.colors
-                                .split(",")
-                                .map(c => c.trim())
-                                .filter(c => c && c !== trimmedColor)
-                                .join(", ");
-                              setFormData({ ...formData, colors });
-                            }}
-                            className="hover:opacity-70"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ) : null;
-                    })}
-                  </div>
-                  <div className="flex gap-2">
-                    <Input
-                      id="color-input"
-                      placeholder="Add a color..."
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          const input = (e.target as HTMLInputElement);
-                          const newColor = input.value.trim();
-                          if (newColor && !formData.colors.includes(newColor)) {
-                            const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
-                            setFormData({ ...formData, colors });
-                            input.value = "";
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const input = document.getElementById("color-input") as HTMLInputElement;
-                        if (input && input.value.trim()) {
-                          const newColor = input.value.trim();
-                          if (!formData.colors.includes(newColor)) {
-                            const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
-                            setFormData({ ...formData, colors });
-                            input.value = "";
-                          }
-                        }
-                      }}
-                    >
-                      Add
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Press Enter or click Add to add colors</p>
+                          ×
+                        </button>
+                      </span>
+                    ) : null;
+                  })}
                 </div>
+                <div className="flex gap-2">
+                  <Input
+                    id="color-input"
+                    placeholder="Add a color..."
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const input = (e.target as HTMLInputElement);
+                        const newColor = input.value.trim();
+                        if (newColor && !formData.colors.includes(newColor)) {
+                          const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
+                          setFormData({ ...formData, colors });
+                          input.value = "";
+                        }
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const input = document.getElementById("color-input") as HTMLInputElement;
+                      if (input && input.value.trim()) {
+                        const newColor = input.value.trim();
+                        if (!formData.colors.includes(newColor)) {
+                          const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
+                          setFormData({ ...formData, colors });
+                          input.value = "";
+                        }
+                      }
+                    }}
+                  >
+                    Add
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">Press Enter or click Add to add colors</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 pt-2">

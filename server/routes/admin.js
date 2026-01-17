@@ -506,4 +506,40 @@ router.get('/invoice-settings/public', async (req, res) => {
   }
 });
 
+// Get all transactions (admin)
+router.get('/transactions', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('userId', 'name email phone')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Transform orders into transactions
+    const transactions = orders.map(order => ({
+      _id: order._id,
+      userId: {
+        name: order.userId?.name || 'Unknown User',
+        email: order.userId?.email || 'N/A'
+      },
+      orderId: order._id,
+      transactionId: order.paymentDetails?.transactionId || `TXN-${order._id.toString().substring(0, 8).toUpperCase()}`,
+      amount: order.totalAmount || 0,
+      status: order.paymentDetails?.status || order.status || 'pending',
+      paymentMethod: order.paymentMethod || 'N/A',
+      description: `Order #${order._id.toString().substring(0, 8)}`,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt
+    }));
+
+    res.json({
+      success: true,
+      transactions,
+      total: transactions.length,
+    });
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    res.status(500).json({ error: 'Failed to fetch transactions' });
+  }
+});
+
 export default router;

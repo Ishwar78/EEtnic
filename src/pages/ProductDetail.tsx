@@ -63,6 +63,16 @@ function getColorHex(colorName: string): string | null {
   return null;
 }
 
+function getSizeStock(product: Product | null, size: string): number {
+  if (!product || !product.stockBySize) return 0;
+  const sizeStock = product.stockBySize.find(s => s.size === size);
+  return sizeStock ? sizeStock.quantity : 0;
+}
+
+function isSizeOutOfStock(product: Product | null, size: string): boolean {
+  return getSizeStock(product, size) === 0;
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -214,6 +224,20 @@ export default function ProductDetail() {
   const handleAddToCart = () => {
     if (!product) return;
 
+    // Check if size is required and selected
+    if (product.sizes && product.sizes.length > 0) {
+      if (!selectedSize) {
+        toast.error("Please select a size");
+        return;
+      }
+
+      // Check if selected size is out of stock
+      if (isSizeOutOfStock(product, selectedSize)) {
+        toast.error(`Size ${selectedSize} is out of stock`);
+        return;
+      }
+    }
+
     // Check if color is required and selected
     if (product.colors && product.colors.length > 0 && !selectedColor) {
       toast.error("Please select a color");
@@ -233,10 +257,26 @@ export default function ProductDetail() {
       },
       quantity
     );
+
+    toast.success(`${product.name} added to cart!`);
   };
 
   const handleBuyNow = () => {
     if (!product) return;
+
+    // Check if size is required and selected
+    if (product.sizes && product.sizes.length > 0) {
+      if (!selectedSize) {
+        toast.error("Please select a size");
+        return;
+      }
+
+      // Check if selected size is out of stock
+      if (isSizeOutOfStock(product, selectedSize)) {
+        toast.error(`Size ${selectedSize} is out of stock`);
+        return;
+      }
+    }
 
     // Check if color is required and selected
     if (product.colors && product.colors.length > 0 && !selectedColor) {
@@ -463,20 +503,32 @@ export default function ProductDetail() {
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {product.sizes.map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => setSelectedSize(size)}
-                          className={cn(
-                            "h-12 min-w-[48px] px-4 rounded-md border-2 font-medium transition-all",
-                            selectedSize === size
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border hover:border-primary"
-                          )}
-                        >
-                          {size}
-                        </button>
-                      ))}
+                      {product.sizes.map((size) => {
+                        const outOfStock = isSizeOutOfStock(product, size);
+                        return (
+                          <div key={size} className="relative">
+                            <button
+                              onClick={() => !outOfStock && setSelectedSize(size)}
+                              disabled={outOfStock}
+                              className={cn(
+                                "h-12 min-w-[48px] px-4 rounded-md border-2 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                selectedSize === size
+                                  ? "border-primary bg-primary text-primary-foreground"
+                                  : outOfStock
+                                  ? "border-destructive/50 text-destructive/50"
+                                  : "border-border hover:border-primary"
+                              )}
+                            >
+                              {size}
+                            </button>
+                            {outOfStock && (
+                              <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded whitespace-nowrap">
+                                Out of Stock
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -540,10 +592,27 @@ export default function ProductDetail() {
                   </div>
                 </div>
 
+                {/* Stock Status Message */}
+                {product.sizes && product.sizes.length > 0 && selectedSize && isSizeOutOfStock(product, selectedSize) && (
+                  <div className="p-3 bg-destructive/10 border border-destructive/30 rounded-lg">
+                    <p className="text-sm font-medium text-destructive">
+                      Size {selectedSize} is currently out of stock
+                    </p>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-3">
-                    <Button variant="gold" size="xl" className="flex-1 gap-2" onClick={handleAddToCart}>
+                    <Button
+                      variant="gold"
+                      size="xl"
+                      className="flex-1 gap-2"
+                      onClick={handleAddToCart}
+                      disabled={
+                        (product.sizes && product.sizes.length > 0 && (!selectedSize || isSizeOutOfStock(product, selectedSize)))
+                      }
+                    >
                       <ShoppingBag className="h-5 w-5" />
                       Add to Cart
                     </Button>
@@ -559,7 +628,15 @@ export default function ProductDetail() {
                       <Share2 className="h-5 w-5" />
                     </Button>
                   </div>
-                  <Button variant="hero" size="xl" className="w-full" onClick={handleBuyNow}>
+                  <Button
+                    variant="hero"
+                    size="xl"
+                    className="w-full"
+                    onClick={handleBuyNow}
+                    disabled={
+                      (product.sizes && product.sizes.length > 0 && (!selectedSize || isSizeOutOfStock(product, selectedSize)))
+                    }
+                  >
                     Buy It Now
                   </Button>
                 </div>

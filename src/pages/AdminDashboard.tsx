@@ -30,6 +30,7 @@ import PaymentManagement from "@/components/PaymentManagement";
 import SizeChartManagement from "@/components/SizeChartManagement";
 import InvoiceDisplay from "@/components/InvoiceDisplay";
 import AdminInvoiceManagement from "@/components/AdminInvoiceManagement";
+import AdminTransactionManagement from "@/components/AdminTransactionManagement";
 
 interface DashboardStats {
   totalUsers: number;
@@ -131,6 +132,7 @@ export default function AdminDashboard() {
     { value: 'banners', label: 'Banners' },
     { value: 'payments', label: 'Payments' },
     { value: 'invoices', label: 'Invoices' },
+    { value: 'transactions', label: 'Transactions' },
     { value: 'size-charts', label: 'Size Charts' },
     { value: 'users', label: 'Users' },
     { value: 'orders', label: 'Orders' },
@@ -579,6 +581,11 @@ export default function AdminDashboard() {
             {/* Invoice Settings Tab */}
             <TabsContent value="invoices" className="space-y-6">
               <AdminInvoiceManagement />
+            </TabsContent>
+
+            {/* Transactions Tab */}
+            <TabsContent value="transactions" className="space-y-6">
+              <AdminTransactionManagement />
             </TabsContent>
 
             {/* Size Charts Tab */}
