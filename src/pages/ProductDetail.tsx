@@ -300,6 +300,12 @@ export default function ProductDetail() {
       return;
     }
 
+    // Check if selected color is out of stock
+    if (selectedColor && isColorOutOfStock(product, selectedColor)) {
+      toast.error(`Color ${selectedColor} is out of stock`);
+      return;
+    }
+
     addToCart(
       {
         id: product._id || product.id,
