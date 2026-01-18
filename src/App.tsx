@@ -28,6 +28,13 @@ import OrderHistory from "./pages/OrderHistory";
 import UserDashboard from "./pages/UserDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import Returns from "./pages/Returns";
+import Shipping from "./pages/Shipping";
+import FAQ from "./pages/FAQ";
+import SizeGuide from "./pages/SizeGuide";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Careers from "./pages/Careers";
 import NotFound from "./pages/NotFound";
 import InstallPWA from "./components/InstallPWA";
 
@@ -86,6 +93,13 @@ const App = () => (
                     <Route path="/orders" element={<OrderHistory />} />
                     <Route path="/vastra/admin" element={<AdminLogin />} />
                     <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/returns" element={<Returns />} />
+                    <Route path="/shipping" element={<Shipping />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/size-guide" element={<SizeGuide />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/careers" element={<Careers />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <CartDrawer />

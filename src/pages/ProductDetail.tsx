@@ -73,6 +73,16 @@ function isSizeOutOfStock(product: Product | null, size: string): boolean {
   return getSizeStock(product, size) === 0;
 }
 
+function getColorStock(product: Product | null, color: string): number {
+  if (!product || !product.stockByColor) return 0;
+  const colorStock = product.stockByColor.find(c => c.color === color);
+  return colorStock ? colorStock.quantity : 0;
+}
+
+function isColorOutOfStock(product: Product | null, color: string): boolean {
+  return getColorStock(product, color) === 0;
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -244,6 +254,12 @@ export default function ProductDetail() {
       return;
     }
 
+    // Check if selected color is out of stock
+    if (selectedColor && isColorOutOfStock(product, selectedColor)) {
+      toast.error(`Color ${selectedColor} is out of stock`);
+      return;
+    }
+
     addToCart(
       {
         id: product._id || product.id,
@@ -281,6 +297,12 @@ export default function ProductDetail() {
     // Check if color is required and selected
     if (product.colors && product.colors.length > 0 && !selectedColor) {
       toast.error("Please select a color");
+      return;
+    }
+
+    // Check if selected color is out of stock
+    if (selectedColor && isColorOutOfStock(product, selectedColor)) {
+      toast.error(`Color ${selectedColor} is out of stock`);
       return;
     }
 
@@ -534,38 +556,50 @@ export default function ProductDetail() {
                 )}
 
                 {/* Color Selector */}
-                {product.colors && product.colors.length > 0 && (
+                {product.colors && product.colors.filter(color => !isColorOutOfStock(product, color)).length > 0 && (
                   <div>
                     <h3 className="font-medium mb-3">Available Colors</h3>
                     <div className="flex flex-wrap gap-3">
-                      {product.colors.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => setSelectedColor(color)}
-                          className="flex flex-col items-center gap-2 group transition-all"
-                          title={color}
-                        >
-                          <div
+                      {product.colors.map((color) => {
+                        const outOfStock = isColorOutOfStock(product, color);
+                        return (
+                          <button
+                            key={color}
+                            onClick={() => !outOfStock && setSelectedColor(color)}
+                            disabled={outOfStock}
                             className={cn(
-                              "h-12 w-12 rounded-full border-2 transition-all",
-                              selectedColor === color
-                                ? "border-primary ring-2 ring-primary ring-offset-2 scale-110"
-                                : "border-border group-hover:border-primary"
+                              "flex flex-col items-center gap-2 group transition-all",
+                              outOfStock && "opacity-50 cursor-not-allowed"
                             )}
-                            style={{
-                              backgroundColor: getColorHex(color) || '#cccccc',
-                            }}
-                          />
-                          <span className={cn(
-                            "text-xs text-center max-w-[60px] truncate font-medium transition-colors",
-                            selectedColor === color
-                              ? "text-primary"
-                              : "text-muted-foreground group-hover:text-foreground"
-                          )}>
-                            {color}
-                          </span>
-                        </button>
-                      ))}
+                            title={outOfStock ? `${color} - Out of stock` : color}
+                          >
+                            <div
+                              className={cn(
+                                "h-12 w-12 rounded-full border-2 transition-all",
+                                selectedColor === color
+                                  ? "border-primary ring-2 ring-primary ring-offset-2 scale-110"
+                                  : "border-border group-hover:border-primary",
+                                outOfStock && "opacity-60 border-muted-foreground"
+                              )}
+                              style={{
+                                backgroundColor: getColorHex(color) || '#cccccc',
+                              }}
+                            />
+                            <span className={cn(
+                              "text-xs text-center max-w-[60px] truncate font-medium transition-colors",
+                              selectedColor === color
+                                ? "text-primary"
+                                : "text-muted-foreground group-hover:text-foreground",
+                              outOfStock && "text-muted-foreground/50"
+                            )}>
+                              {color}
+                            </span>
+                            {outOfStock && (
+                              <span className="text-[10px] text-destructive font-semibold">Out of Stock</span>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
