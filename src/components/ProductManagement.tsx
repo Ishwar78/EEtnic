@@ -72,6 +72,7 @@ export default function ProductManagement() {
     image: "",
     images: [] as string[],
     stockBySize: [] as Array<{ size: string; quantity: number | string }>,
+    stockByColor: [] as Array<{ color: string; quantity: number | string }>,
   });
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
