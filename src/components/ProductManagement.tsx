@@ -789,6 +789,9 @@ export default function ProductManagement() {
                               .filter(c => c && c !== trimmedColor)
                               .join(", ");
                             setFormData({ ...formData, colors });
+                            // Also remove from stockByColor
+                            const updatedStockByColor = formData.stockByColor.filter(sc => sc.color !== trimmedColor);
+                            setFormData(prev => ({ ...prev, stockByColor: updatedStockByColor }));
                           }}
                           className="hover:opacity-70"
                         >
@@ -809,7 +812,9 @@ export default function ProductManagement() {
                         const newColor = input.value.trim();
                         if (newColor && !formData.colors.includes(newColor)) {
                           const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
-                          setFormData({ ...formData, colors });
+                          // Auto-add to stockByColor
+                          const updatedStockByColor = [...formData.stockByColor, { color: newColor, quantity: "" }];
+                          setFormData(prev => ({ ...prev, colors, stockByColor: updatedStockByColor }));
                           input.value = "";
                         }
                       }
@@ -825,7 +830,9 @@ export default function ProductManagement() {
                         const newColor = input.value.trim();
                         if (!formData.colors.includes(newColor)) {
                           const colors = formData.colors ? formData.colors + ", " + newColor : newColor;
-                          setFormData({ ...formData, colors });
+                          // Auto-add to stockByColor
+                          const updatedStockByColor = [...formData.stockByColor, { color: newColor, quantity: "" }];
+                          setFormData(prev => ({ ...prev, colors, stockByColor: updatedStockByColor }));
                           input.value = "";
                         }
                       }
@@ -837,6 +844,45 @@ export default function ProductManagement() {
                 <p className="text-xs text-muted-foreground">Press Enter or click Add to add colors</p>
               </div>
             </div>
+
+            {/* Stock by Color Section */}
+            {formData.colors.split(",").filter(c => c.trim()).length > 0 && (
+              <div className="space-y-3 p-4 bg-muted/50 rounded-lg border border-border">
+                <Label className="font-semibold">Stock by Color</Label>
+                <p className="text-xs text-muted-foreground">Add quantity for each color. Set to 0 to mark as out of stock.</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {formData.colors
+                    .split(",")
+                    .map(c => c.trim())
+                    .filter(c => c)
+                    .map((color) => (
+                      <div key={color} className="space-y-1">
+                        <Label htmlFor={`stock-color-${color}`} className="text-xs">{color}</Label>
+                        <Input
+                          id={`stock-color-${color}`}
+                          type="number"
+                          min="0"
+                          value={
+                            formData.stockByColor.find(sc => sc.color === color)?.quantity || ""
+                          }
+                          onChange={(e) => {
+                            const updated = [...formData.stockByColor];
+                            const index = updated.findIndex(sc => sc.color === color);
+                            if (index >= 0) {
+                              updated[index].quantity = e.target.value;
+                            } else {
+                              updated.push({ color, quantity: e.target.value });
+                            }
+                            setFormData({ ...formData, stockByColor: updated });
+                          }}
+                          placeholder="0"
+                          className="text-center"
+                        />
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="flex items-center justify-between">
                 <Label>New Arrival</Label>
