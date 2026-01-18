@@ -146,6 +146,7 @@ export default function ProductManagement() {
       image: product.image,
       images: existingImages,
       stockBySize: product.stockBySize || [],
+      stockByColor: product.stockByColor || [],
     });
     setImagePreview(product.image);
     setImagePreviews(existingImages);
