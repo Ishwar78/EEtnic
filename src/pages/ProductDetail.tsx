@@ -544,38 +544,50 @@ export default function ProductDetail() {
                 )}
 
                 {/* Color Selector */}
-                {product.colors && product.colors.length > 0 && (
+                {product.colors && product.colors.filter(color => !isColorOutOfStock(product, color)).length > 0 && (
                   <div>
                     <h3 className="font-medium mb-3">Available Colors</h3>
                     <div className="flex flex-wrap gap-3">
-                      {product.colors.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => setSelectedColor(color)}
-                          className="flex flex-col items-center gap-2 group transition-all"
-                          title={color}
-                        >
-                          <div
+                      {product.colors.map((color) => {
+                        const outOfStock = isColorOutOfStock(product, color);
+                        return (
+                          <button
+                            key={color}
+                            onClick={() => !outOfStock && setSelectedColor(color)}
+                            disabled={outOfStock}
                             className={cn(
-                              "h-12 w-12 rounded-full border-2 transition-all",
-                              selectedColor === color
-                                ? "border-primary ring-2 ring-primary ring-offset-2 scale-110"
-                                : "border-border group-hover:border-primary"
+                              "flex flex-col items-center gap-2 group transition-all",
+                              outOfStock && "opacity-50 cursor-not-allowed"
                             )}
-                            style={{
-                              backgroundColor: getColorHex(color) || '#cccccc',
-                            }}
-                          />
-                          <span className={cn(
-                            "text-xs text-center max-w-[60px] truncate font-medium transition-colors",
-                            selectedColor === color
-                              ? "text-primary"
-                              : "text-muted-foreground group-hover:text-foreground"
-                          )}>
-                            {color}
-                          </span>
-                        </button>
-                      ))}
+                            title={outOfStock ? `${color} - Out of stock` : color}
+                          >
+                            <div
+                              className={cn(
+                                "h-12 w-12 rounded-full border-2 transition-all",
+                                selectedColor === color
+                                  ? "border-primary ring-2 ring-primary ring-offset-2 scale-110"
+                                  : "border-border group-hover:border-primary",
+                                outOfStock && "opacity-60 border-muted-foreground"
+                              )}
+                              style={{
+                                backgroundColor: getColorHex(color) || '#cccccc',
+                              }}
+                            />
+                            <span className={cn(
+                              "text-xs text-center max-w-[60px] truncate font-medium transition-colors",
+                              selectedColor === color
+                                ? "text-primary"
+                                : "text-muted-foreground group-hover:text-foreground",
+                              outOfStock && "text-muted-foreground/50"
+                            )}>
+                              {color}
+                            </span>
+                            {outOfStock && (
+                              <span className="text-[10px] text-destructive font-semibold">Out of Stock</span>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
