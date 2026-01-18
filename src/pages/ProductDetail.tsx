@@ -73,6 +73,16 @@ function isSizeOutOfStock(product: Product | null, size: string): boolean {
   return getSizeStock(product, size) === 0;
 }
 
+function getColorStock(product: Product | null, color: string): number {
+  if (!product || !product.stockByColor) return 0;
+  const colorStock = product.stockByColor.find(c => c.color === color);
+  return colorStock ? colorStock.quantity : 0;
+}
+
+function isColorOutOfStock(product: Product | null, color: string): boolean {
+  return getColorStock(product, color) === 0;
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
