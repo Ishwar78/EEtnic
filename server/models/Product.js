@@ -60,6 +60,14 @@ const productSchema = new mongoose.Schema({
       min: 0
     }
   }],
+  stockByColor: [{
+    color: String,
+    quantity: {
+      type: Number,
+      default: 0,
+      min: 0
+    }
+  }],
   rating: {
     type: Number,
     default: 0,
