@@ -28,6 +28,10 @@ import OrderHistory from "./pages/OrderHistory";
 import UserDashboard from "./pages/UserDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import Returns from "./pages/Returns";
+import Shipping from "./pages/Shipping";
+import FAQ from "./pages/FAQ";
+import SizeGuide from "./pages/SizeGuide";
 import NotFound from "./pages/NotFound";
 import InstallPWA from "./components/InstallPWA";
 
