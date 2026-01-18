@@ -32,6 +32,9 @@ import Returns from "./pages/Returns";
 import Shipping from "./pages/Shipping";
 import FAQ from "./pages/FAQ";
 import SizeGuide from "./pages/SizeGuide";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Careers from "./pages/Careers";
 import NotFound from "./pages/NotFound";
 import InstallPWA from "./components/InstallPWA";
 
