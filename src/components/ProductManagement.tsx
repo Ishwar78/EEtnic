@@ -260,6 +260,15 @@ export default function ProductManagement() {
         };
       });
 
+      // Build stockByColor from form data
+      const stockByColor = colors.map(color => {
+        const existing = formData.stockByColor.find(sc => sc.color === color);
+        return {
+          color,
+          quantity: existing ? parseInt(existing.quantity.toString()) || 0 : 0
+        };
+      });
+
       const payload = {
         name: formData.name,
         price: parseFloat(formData.price),
@@ -270,6 +279,7 @@ export default function ProductManagement() {
         sizes,
         colors,
         stockBySize,
+        stockByColor,
         description: formData.description || formData.name,
         isNew: formData.isNew || false,
         isBestseller: formData.isBestseller || false,
