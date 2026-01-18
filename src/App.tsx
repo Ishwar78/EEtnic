@@ -90,6 +90,10 @@ const App = () => (
                     <Route path="/orders" element={<OrderHistory />} />
                     <Route path="/vastra/admin" element={<AdminLogin />} />
                     <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/returns" element={<Returns />} />
+                    <Route path="/shipping" element={<Shipping />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/size-guide" element={<SizeGuide />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <CartDrawer />
