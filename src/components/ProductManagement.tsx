@@ -173,6 +173,7 @@ export default function ProductManagement() {
       image: "",
       images: [],
       stockBySize: defaultSizes.map(size => ({ size, quantity: "" })),
+      stockByColor: [],
     });
     setImagePreview("");
     setImagePreviews([]);
