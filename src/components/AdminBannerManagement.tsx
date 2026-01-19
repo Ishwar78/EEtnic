@@ -410,7 +410,7 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
                 <TableRow>
                   <TableHead>Preview</TableHead>
                   <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
+                  {!category && <TableHead>Category</TableHead>}
                   <TableHead>Subtitle</TableHead>
                   <TableHead>CTA</TableHead>
                   <TableHead>Status</TableHead>
@@ -423,9 +423,9 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
                     <TableCell>
                       <div className="w-20 h-12 bg-muted rounded flex items-center justify-center overflow-hidden">
                         {banner.imageUrl ? (
-                          <img 
-                            src={banner.imageUrl} 
-                            alt={banner.title} 
+                          <img
+                            src={banner.imageUrl}
+                            alt={banner.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               (e.target as HTMLImageElement).style.display = 'none';
@@ -437,11 +437,13 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
                       </div>
                     </TableCell>
                     <TableCell className="font-medium">{banner.title}</TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                        {getCategoryLabel(banner.category)}
-                      </span>
-                    </TableCell>
+                    {!category && (
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                          {getCategoryLabel(banner.category)}
+                        </span>
+                      </TableCell>
+                    )}
                     <TableCell>{banner.subtitle}</TableCell>
                     <TableCell>
                       <span className="text-sm text-muted-foreground">{banner.ctaText}</span>
