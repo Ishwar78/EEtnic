@@ -312,26 +312,39 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Banners</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Banners in Category" : "Total Banners"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{banners.length}</div>
+            <div className="text-2xl font-bold">{filteredBanners.length}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Active Banners</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Active in Category" : "Active Banners"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{activeBanners}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {filteredBanners.filter(b => b.isActive).length}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Categories Covered</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Inactive in Category" : "Categories Covered"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{new Set(banners.map(b => b.category)).size}</div>
+            <div className="text-2xl font-bold">
+              {category
+                ? filteredBanners.filter(b => !b.isActive).length
+                : new Set(banners.map(b => b.category)).size
+              }
+            </div>
           </CardContent>
         </Card>
       </div>
