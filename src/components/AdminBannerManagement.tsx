@@ -397,9 +397,11 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
             </div>
           ) : filteredBanners.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              {filterCategory === "all" 
-                ? "No banners created yet. Click 'Add Banner' to create one."
-                : "No banners in this category. Click 'Add Banner' to create one."
+              {category
+                ? `No banners created for ${getCategoryLabel(category)} yet. Click 'Add Banner' to create one.`
+                : filterCategory === "all"
+                  ? "No banners created yet. Click 'Add Banner' to create one."
+                  : "No banners in this category. Click 'Add Banner' to create one."
               }
             </div>
           ) : (
