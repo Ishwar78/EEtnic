@@ -26,7 +26,7 @@ router.get('/category/:category', async (req, res) => {
 });
 
 // Get all banners (admin)
-router.get('/admin/all', auth, async (req, res) => {
+router.get('/admin/all', authMiddleware, async (req, res) => {
   try {
     const banners = await Banner.find().sort({ category: 1, order: 1 });
     res.json({ success: true, banners });
@@ -36,7 +36,7 @@ router.get('/admin/all', auth, async (req, res) => {
 });
 
 // Create banner (admin)
-router.post('/', auth, async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     const { title, subtitle, description, imageUrl, ctaText, ctaLink, category, isActive, order } = req.body;
 
@@ -64,7 +64,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Update banner (admin)
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, subtitle, description, imageUrl, ctaText, ctaLink, category, isActive, order } = req.body;
@@ -96,7 +96,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete banner (admin)
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const banner = await Banner.findByIdAndDelete(id);
