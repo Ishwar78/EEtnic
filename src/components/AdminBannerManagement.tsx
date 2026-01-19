@@ -55,14 +55,18 @@ const CATEGORY_OPTIONS = [
   { value: "winter_collection", label: "Winter Collection" },
 ];
 
-export default function AdminBannerManagement() {
+interface AdminBannerManagementProps {
+  category?: string;
+}
+
+export default function AdminBannerManagement({ category }: AdminBannerManagementProps) {
   const { token } = useAuth();
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
-  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterCategory, setFilterCategory] = useState<string>(category || "all");
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -106,6 +110,12 @@ export default function AdminBannerManagement() {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (category) {
+      setFilterCategory(category);
+    }
+  }, [category]);
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -135,6 +145,13 @@ export default function AdminBannerManagement() {
       });
     } else {
       resetForm();
+      // If viewing category-specific view, set the category
+      if (category) {
+        setFormData(prev => ({
+          ...prev,
+          category,
+        }));
+      }
     }
     setIsDialogOpen(true);
   };
