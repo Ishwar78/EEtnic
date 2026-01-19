@@ -19,6 +19,7 @@ import {
   Image as ImageIcon,
   Ticket,
   Film,
+  Frame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -72,7 +73,19 @@ const adminSections: SidebarItem[] = [
   { title: "Products", icon: ShoppingBag, href: "/admin?tab=products" },
   { title: "Categories", icon: Layers, href: "/admin?tab=categories" },
   { title: "Coupons", icon: Ticket, href: "/admin?tab=coupons" },
-  { title: "Banners", icon: ImageIcon, href: "/admin?tab=banners" },
+  { title: "All Banners", icon: ImageIcon, href: "/admin?tab=banners" },
+  {
+    title: "Banners by Category",
+    icon: Frame,
+    items: [
+      { title: "Bestsellers", href: "/admin?tab=banners&category=bestsellers" },
+      { title: "New Arrivals", href: "/admin?tab=banners&category=new_arrivals" },
+      { title: "Ethnic Wear", href: "/admin?tab=banners&category=ethnic_wear" },
+      { title: "Western Wear", href: "/admin?tab=banners&category=western_wear" },
+      { title: "Summer Collection", href: "/admin?tab=banners&category=summer_collection" },
+      { title: "Winter Collection", href: "/admin?tab=banners&category=winter_collection" },
+    ],
+  },
   { title: "Users", icon: Users, href: "/admin?tab=users" },
   { title: "Orders", icon: Package, href: "/admin?tab=orders" },
   { title: "Transactions", icon: BarChart3, href: "/admin?tab=transactions" },

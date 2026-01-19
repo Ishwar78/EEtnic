@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Table,
   TableBody,
@@ -22,69 +23,98 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Image, Plus, Pencil, Trash2, MoveUp, MoveDown, Eye, EyeOff } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Image, Plus, Pencil, Trash2, Eye, EyeOff, Loader2 } from "lucide-react";
 
 interface Banner {
-  id: string;
+  _id?: string;
+  id?: string;
   title: string;
   subtitle: string;
   description: string;
   imageUrl: string;
   ctaText: string;
   ctaLink: string;
+  category: string;
   isActive: boolean;
   order: number;
 }
 
-const initialBanners: Banner[] = [
-  {
-    id: "1",
-    title: "New Arrivals",
-    subtitle: "Festive Suit Collection",
-    description: "Discover exquisite handcrafted ethnic wear for every occasion",
-    imageUrl: "/hero-model-1.jpg",
-    ctaText: "Shop Now",
-    ctaLink: "/shop?category=new-arrivals",
-    isActive: true,
-    order: 1,
-  },
-  {
-    id: "2",
-    title: "Exclusive",
-    subtitle: "Royal Lehenga Collection",
-    description: "Timeless elegance meets contemporary design",
-    imageUrl: "/hero-model-2.jpg",
-    ctaText: "Explore Collection",
-    ctaLink: "/shop?category=lehengas",
-    isActive: true,
-    order: 2,
-  },
-  {
-    id: "3",
-    title: "Bridal Edit",
-    subtitle: "Wedding Season Special",
-    description: "Make your special day unforgettable",
-    imageUrl: "/hero-model-3.jpg",
-    ctaText: "View Collection",
-    ctaLink: "/shop?category=bridal",
-    isActive: true,
-    order: 3,
-  },
+const CATEGORY_OPTIONS = [
+  { value: "bestsellers", label: "Bestsellers" },
+  { value: "new_arrivals", label: "New Arrivals" },
+  { value: "ethnic_wear", label: "Ethnic Wear" },
+  { value: "western_wear", label: "Western Wear" },
+  { value: "summer_collection", label: "Summer Collection" },
+  { value: "winter_collection", label: "Winter Collection" },
 ];
 
-export default function AdminBannerManagement() {
-  const [banners, setBanners] = useState<Banner[]>(initialBanners);
+interface AdminBannerManagementProps {
+  category?: string;
+}
+
+export default function AdminBannerManagement({ category }: AdminBannerManagementProps) {
+  const { token } = useAuth();
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string>(category || "all");
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
     description: "",
     imageUrl: "",
-    ctaText: "",
+    ctaText: "Shop Now",
     ctaLink: "",
+    category: "bestsellers",
     isActive: true,
   });
+
+  const API_URL = import.meta.env.VITE_API_URL || '/api';
+
+  // Fetch banners
+  const fetchBanners = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/banners/admin/all`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch banners');
+      }
+
+      const data = await response.json();
+      setBanners(data.banners || []);
+    } catch (error) {
+      console.error('Error fetching banners:', error);
+      toast.error("Failed to load banners");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchBanners();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (category) {
+      setFilterCategory(category);
+    }
+  }, [category]);
 
   const resetForm = () => {
     setFormData({
@@ -92,8 +122,9 @@ export default function AdminBannerManagement() {
       subtitle: "",
       description: "",
       imageUrl: "",
-      ctaText: "",
+      ctaText: "Shop Now",
       ctaLink: "",
+      category: category || "bestsellers",
       isActive: true,
     });
     setEditingBanner(null);
@@ -109,10 +140,18 @@ export default function AdminBannerManagement() {
         imageUrl: banner.imageUrl,
         ctaText: banner.ctaText,
         ctaLink: banner.ctaLink,
+        category: banner.category,
         isActive: banner.isActive,
       });
     } else {
       resetForm();
+      // If viewing category-specific view, set the category
+      if (category) {
+        setFormData(prev => ({
+          ...prev,
+          category,
+        }));
+      }
     }
     setIsDialogOpen(true);
   };
@@ -122,82 +161,146 @@ export default function AdminBannerManagement() {
     resetForm();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.subtitle) {
-      toast({
-        title: "Validation Error",
-        description: "Title and subtitle are required",
-        variant: "destructive",
-      });
+    if (!formData.title || !formData.subtitle || !formData.imageUrl || !formData.ctaLink) {
+      toast.error("Title, subtitle, image URL, and CTA link are required");
       return;
     }
 
-    if (editingBanner) {
-      setBanners(banners.map(b => 
-        b.id === editingBanner.id 
-          ? { ...b, ...formData }
-          : b
-      ));
-      toast({
-        title: "Banner Updated",
-        description: "The banner has been updated successfully.",
-      });
-    } else {
-      const newBanner: Banner = {
-        id: Date.now().toString(),
-        ...formData,
-        order: banners.length + 1,
+    setIsSaving(true);
+    try {
+      const payload = {
+        title: formData.title,
+        subtitle: formData.subtitle,
+        description: formData.description,
+        imageUrl: formData.imageUrl,
+        ctaText: formData.ctaText,
+        ctaLink: formData.ctaLink,
+        category: formData.category,
+        isActive: formData.isActive,
+        order: editingBanner?.order || 0,
       };
-      setBanners([...banners, newBanner]);
-      toast({
-        title: "Banner Created",
-        description: "New banner has been added successfully.",
-      });
+
+      if (editingBanner?._id) {
+        // Update
+        const response = await fetch(`${API_URL}/banners/${editingBanner._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update banner');
+        }
+
+        toast.success("Banner updated successfully");
+      } else {
+        // Create
+        const response = await fetch(`${API_URL}/banners`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create banner');
+        }
+
+        toast.success("Banner created successfully");
+      }
+
+      handleCloseDialog();
+      fetchBanners();
+    } catch (error) {
+      console.error('Error saving banner:', error);
+      toast.error(error instanceof Error ? error.message : "Failed to save banner");
+    } finally {
+      setIsSaving(false);
     }
-    
-    handleCloseDialog();
   };
 
-  const handleDelete = (id: string) => {
-    setBanners(banners.filter(b => b.id !== id));
-    toast({
-      title: "Banner Deleted",
-      description: "The banner has been removed.",
-    });
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this banner?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/banners/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete banner');
+      }
+
+      toast.success("Banner deleted successfully");
+      fetchBanners();
+    } catch (error) {
+      console.error('Error deleting banner:', error);
+      toast.error("Failed to delete banner");
+    }
   };
 
-  const handleToggleActive = (id: string) => {
-    setBanners(banners.map(b => 
-      b.id === id ? { ...b, isActive: !b.isActive } : b
-    ));
+  const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    try {
+      const banner = banners.find(b => b._id === id);
+      if (!banner) return;
+
+      const response = await fetch(`${API_URL}/banners/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...banner,
+          isActive: !currentStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update banner');
+      }
+
+      toast.success("Banner status updated");
+      fetchBanners();
+    } catch (error) {
+      console.error('Error updating banner:', error);
+      toast.error("Failed to update banner");
+    }
   };
 
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return;
-    const newBanners = [...banners];
-    [newBanners[index], newBanners[index - 1]] = [newBanners[index - 1], newBanners[index]];
-    newBanners.forEach((b, i) => b.order = i + 1);
-    setBanners(newBanners);
-  };
-
-  const handleMoveDown = (index: number) => {
-    if (index === banners.length - 1) return;
-    const newBanners = [...banners];
-    [newBanners[index], newBanners[index + 1]] = [newBanners[index + 1], newBanners[index]];
-    newBanners.forEach((b, i) => b.order = i + 1);
-    setBanners(newBanners);
-  };
+  const filteredBanners = filterCategory === "all" 
+    ? banners 
+    : banners.filter(b => b.category === filterCategory);
 
   const activeBanners = banners.filter(b => b.isActive).length;
+
+  const getCategoryLabel = (category: string) => {
+    return CATEGORY_OPTIONS.find(opt => opt.value === category)?.label || category;
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Banner Management</h2>
-          <p className="text-muted-foreground">Manage hero slider banners</p>
+          <h2 className="text-2xl font-bold text-foreground">
+            {category ? `${getCategoryLabel(category)} Banners` : "Banner Management"}
+          </h2>
+          <p className="text-muted-foreground">
+            {category ? `Manage banners for ${getCategoryLabel(category)}` : "Manage banners for different categories"}
+          </p>
         </div>
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="h-4 w-4 mr-2" />
@@ -209,133 +312,180 @@ export default function AdminBannerManagement() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Banners</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Banners in Category" : "Total Banners"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{banners.length}</div>
+            <div className="text-2xl font-bold">{filteredBanners.length}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Active Banners</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Active in Category" : "Active Banners"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{activeBanners}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {filteredBanners.filter(b => b.isActive).length}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Inactive Banners</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {category ? "Inactive in Category" : "Categories Covered"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-muted-foreground">{banners.length - activeBanners}</div>
+            <div className="text-2xl font-bold">
+              {category
+                ? filteredBanners.filter(b => !b.isActive).length
+                : new Set(banners.map(b => b.category)).size
+              }
+            </div>
           </CardContent>
         </Card>
       </div>
 
+      {/* Filter - Hide if viewing specific category */}
+      {!category && (
+        <div className="flex items-center gap-4">
+          <Label className="text-foreground font-medium">Filter by Category:</Label>
+          <Select value={filterCategory} onValueChange={setFilterCategory}>
+            <SelectTrigger className="w-64">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {CATEGORY_OPTIONS.map(cat => (
+                <SelectItem key={cat.value} value={cat.value}>
+                  {cat.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       {/* Banners Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Banners</CardTitle>
-          <CardDescription>Drag to reorder or use arrow buttons</CardDescription>
+          <CardTitle>
+            {category
+              ? `${getCategoryLabel(category)} Banners`
+              : filterCategory === "all"
+                ? "All Banners"
+                : `${getCategoryLabel(filterCategory)} Banners`
+            }
+          </CardTitle>
+          <CardDescription>
+            {category
+              ? `Managing ${filteredBanners.length} banner(s) for ${getCategoryLabel(category)}`
+              : filterCategory === "all"
+                ? "Showing all banners across all categories"
+                : `Showing ${filteredBanners.length} banner(s) in this category`
+            }
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">Order</TableHead>
-                <TableHead>Preview</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Subtitle</TableHead>
-                <TableHead>CTA</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {banners.map((banner, index) => (
-                <TableRow key={banner.id} className={!banner.isActive ? "opacity-50" : ""}>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6"
-                        onClick={() => handleMoveUp(index)}
-                        disabled={index === 0}
-                      >
-                        <MoveUp className="h-3 w-3" />
-                      </Button>
-                      <span className="text-center text-sm font-medium">{banner.order}</span>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6"
-                        onClick={() => handleMoveDown(index)}
-                        disabled={index === banners.length - 1}
-                      >
-                        <MoveDown className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="w-20 h-12 bg-muted rounded flex items-center justify-center overflow-hidden">
-                      {banner.imageUrl ? (
-                        <img 
-                          src={banner.imageUrl} 
-                          alt={banner.title} 
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <Image className="h-6 w-6 text-muted-foreground" />
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium">{banner.title}</TableCell>
-                  <TableCell>{banner.subtitle}</TableCell>
-                  <TableCell>
-                    <span className="text-sm text-muted-foreground">{banner.ctaText}</span>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleToggleActive(banner.id)}
-                      className={banner.isActive ? "text-green-600" : "text-muted-foreground"}
-                    >
-                      {banner.isActive ? (
-                        <><Eye className="h-4 w-4 mr-1" /> Active</>
-                      ) : (
-                        <><EyeOff className="h-4 w-4 mr-1" /> Hidden</>
-                      )}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleOpenDialog(banner)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive hover:text-destructive"
-                        onClick={() => handleDelete(banner.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <span className="ml-2 text-muted-foreground">Loading banners...</span>
+            </div>
+          ) : filteredBanners.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              {category
+                ? `No banners created for ${getCategoryLabel(category)} yet. Click 'Add Banner' to create one.`
+                : filterCategory === "all"
+                  ? "No banners created yet. Click 'Add Banner' to create one."
+                  : "No banners in this category. Click 'Add Banner' to create one."
+              }
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Preview</TableHead>
+                  <TableHead>Title</TableHead>
+                  {!category && <TableHead>Category</TableHead>}
+                  <TableHead>Subtitle</TableHead>
+                  <TableHead>CTA</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredBanners.map((banner) => (
+                  <TableRow key={banner._id} className={!banner.isActive ? "opacity-50" : ""}>
+                    <TableCell>
+                      <div className="w-20 h-12 bg-muted rounded flex items-center justify-center overflow-hidden">
+                        {banner.imageUrl ? (
+                          <img
+                            src={banner.imageUrl}
+                            alt={banner.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <Image className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">{banner.title}</TableCell>
+                    {!category && (
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                          {getCategoryLabel(banner.category)}
+                        </span>
+                      </TableCell>
+                    )}
+                    <TableCell>{banner.subtitle}</TableCell>
+                    <TableCell>
+                      <span className="text-sm text-muted-foreground">{banner.ctaText}</span>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleToggleActive(banner._id || '', banner.isActive)}
+                        className={banner.isActive ? "text-green-600" : "text-muted-foreground"}
+                      >
+                        {banner.isActive ? (
+                          <><Eye className="h-4 w-4 mr-1" /> Active</>
+                        ) : (
+                          <><EyeOff className="h-4 w-4 mr-1" /> Hidden</>
+                        )}
+                      </Button>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleOpenDialog(banner)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:text-destructive"
+                          onClick={() => handleDelete(banner._id || '')}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
@@ -349,23 +499,50 @@ export default function AdminBannerManagement() {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="category">Category *</Label>
+              {category ? (
+                <Input
+                  id="category"
+                  value={getCategoryLabel(formData.category)}
+                  disabled
+                  className="bg-muted"
+                />
+              ) : (
+                <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                  <SelectTrigger id="category">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CATEGORY_OPTIONS.map(cat => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Title Tag</Label>
+                <Label htmlFor="title">Title Tag *</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g., New Arrivals"
+                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="subtitle">Subtitle (Main Heading)</Label>
+                <Label htmlFor="subtitle">Subtitle (Main Heading) *</Label>
                 <Input
                   id="subtitle"
                   value={formData.subtitle}
                   onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                   placeholder="e.g., Festive Suit Collection"
+                  required
                 />
               </div>
             </div>
@@ -382,15 +559,16 @@ export default function AdminBannerManagement() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">Image URL</Label>
+              <Label htmlFor="imageUrl">Image URL *</Label>
               <Input
                 id="imageUrl"
                 value={formData.imageUrl}
                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                placeholder="https://example.com/image.jpg or /local-image.jpg"
+                placeholder="https://example.com/image.jpg"
+                required
               />
               <p className="text-xs text-muted-foreground">
-                Enter an image URL. For local images, upload to public folder and use /filename.jpg
+                Enter a complete image URL. For local images, upload to public folder and use /filename.jpg
               </p>
             </div>
 
@@ -405,12 +583,13 @@ export default function AdminBannerManagement() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="ctaLink">Button Link</Label>
+                <Label htmlFor="ctaLink">Button Link *</Label>
                 <Input
                   id="ctaLink"
                   value={formData.ctaLink}
                   onChange={(e) => setFormData({ ...formData, ctaLink: e.target.value })}
                   placeholder="e.g., /shop?category=new"
+                  required
                 />
               </div>
             </div>
@@ -425,10 +604,11 @@ export default function AdminBannerManagement() {
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={handleCloseDialog}>
+              <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={isSaving}>
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={isSaving}>
+                {isSaving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 {editingBanner ? "Update Banner" : "Create Banner"}
               </Button>
             </DialogFooter>

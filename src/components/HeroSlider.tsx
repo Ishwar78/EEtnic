@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { handleVideoError } from "@/lib/videoUtils";
 import { getVideoSource } from "@/lib/videoUtils";
 import heroImage1 from "@/assets/hero-model-1.jpg";
 import heroImage2 from "@/assets/hero-model-2.jpg";
@@ -196,7 +197,7 @@ export default function HeroSlider() {
                     loop
                     playsInline
                     onError={(e) => {
-                      console.error('Video load error:', { url: videoSource.directUrl, error: e.currentTarget.error?.message });
+                      handleVideoError(e, videoSource.directUrl);
                     }}
                     className="absolute inset-0 w-full h-full object-cover transform origin-left md:skew-x-[-6deg] md:translate-x-12 scale-110"
                   />

@@ -570,7 +570,7 @@ export default function AdminDashboard() {
 
             {/* Banners Tab */}
             <TabsContent value="banners" className="space-y-6">
-              <AdminBannerManagement />
+              <AdminBannerManagement category={searchParams.get('category') || undefined} />
             </TabsContent>
 
             {/* Payments Tab */}

@@ -23,7 +23,7 @@ import {
 import { Plus, Edit, Trash2, Video, Loader2, Play, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
-import { parseVideoSource } from "@/lib/videoUtils";
+import { parseVideoSource, handleVideoError } from "@/lib/videoUtils";
 
 interface VideoItem {
   _id?: string;
@@ -112,6 +112,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
             className="w-full h-full object-cover"
             controls
             onError={(e) => {
+              handleVideoError(e, videoSource.directUrl);
               const target = e.target as HTMLVideoElement;
               target.style.display = 'none';
             }}
@@ -538,6 +539,7 @@ const AdminVideoManagement = () => {
                           src={video.url}
                           className="w-full h-full object-cover"
                           onError={(e) => {
+                            handleVideoError(e, video.url);
                             const target = e.target as HTMLVideoElement;
                             target.style.display = 'none';
                           }}
