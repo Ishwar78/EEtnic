@@ -197,7 +197,7 @@ export default function HeroSlider() {
                     loop
                     playsInline
                     onError={(e) => {
-                      console.error('Video load error:', { url: videoSource.directUrl, error: e.currentTarget.error?.message });
+                      handleVideoError(e, videoSource.directUrl);
                     }}
                     className="absolute inset-0 w-full h-full object-cover transform origin-left md:skew-x-[-6deg] md:translate-x-12 scale-110"
                   />
