@@ -214,3 +214,35 @@ export function supportsAutoplay(type: VideoType): boolean {
 export function getVideoSource(url: string): VideoSource {
   return parseVideoSource(url);
 }
+
+/**
+ * Get a readable error message from a video error event
+ */
+export function getVideoErrorMessage(error: MediaError | null, url?: string): string {
+  if (!error) {
+    return 'Unknown video error';
+  }
+
+  const errorMessages: Record<number, string> = {
+    [error.MEDIA_ERR_ABORTED]: 'Video playback was aborted',
+    [error.MEDIA_ERR_NETWORK]: 'Network error occurred while loading video',
+    [error.MEDIA_ERR_DECODE]: 'Video format not supported or corrupted',
+    [error.MEDIA_ERR_SRC_NOT_SUPPORTED]: 'Video source not supported',
+  };
+
+  return errorMessages[error.code] || error.message || 'Unknown video error';
+}
+
+/**
+ * Handle video load error with proper logging
+ */
+export function handleVideoError(e: Event, url?: string): void {
+  const target = e.target as HTMLVideoElement;
+  const errorMessage = getVideoErrorMessage(target.error, url);
+
+  console.error('Video load error:', {
+    url: url || target.src,
+    message: errorMessage,
+    code: target.error?.code,
+  });
+}
