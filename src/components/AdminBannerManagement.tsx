@@ -373,12 +373,19 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
       <Card>
         <CardHeader>
           <CardTitle>
-            {filterCategory === "all" ? "All Banners" : `${getCategoryLabel(filterCategory)} Banners`}
+            {category
+              ? `${getCategoryLabel(category)} Banners`
+              : filterCategory === "all"
+                ? "All Banners"
+                : `${getCategoryLabel(filterCategory)} Banners`
+            }
           </CardTitle>
           <CardDescription>
-            {filterCategory === "all" 
-              ? "Showing all banners across all categories"
-              : `Showing ${filteredBanners.length} banner(s) in this category`
+            {category
+              ? `Managing ${filteredBanners.length} banner(s) for ${getCategoryLabel(category)}`
+              : filterCategory === "all"
+                ? "Showing all banners across all categories"
+                : `Showing ${filteredBanners.length} banner(s) in this category`
             }
           </CardDescription>
         </CardHeader>
