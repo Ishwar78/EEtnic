@@ -295,8 +295,12 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Banner Management</h2>
-          <p className="text-muted-foreground">Manage banners for different categories</p>
+          <h2 className="text-2xl font-bold text-foreground">
+            {category ? `${getCategoryLabel(category)} Banners` : "Banner Management"}
+          </h2>
+          <p className="text-muted-foreground">
+            {category ? `Manage banners for ${getCategoryLabel(category)}` : "Manage banners for different categories"}
+          </p>
         </div>
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="h-4 w-4 mr-2" />
