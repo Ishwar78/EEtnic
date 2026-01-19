@@ -112,6 +112,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
             className="w-full h-full object-cover"
             controls
             onError={(e) => {
+              handleVideoError(e, videoSource.directUrl);
               const target = e.target as HTMLVideoElement;
               target.style.display = 'none';
             }}
