@@ -539,6 +539,7 @@ const AdminVideoManagement = () => {
                           src={video.url}
                           className="w-full h-full object-cover"
                           onError={(e) => {
+                            handleVideoError(e, video.url);
                             const target = e.target as HTMLVideoElement;
                             target.style.display = 'none';
                           }}
