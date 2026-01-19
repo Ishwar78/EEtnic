@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Heart, Eye, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { parseVideoSource, VideoType } from "@/lib/videoUtils";
+import { parseVideoSource, VideoType, handleVideoError } from "@/lib/videoUtils";
 
 interface MediaItem {
   _id?: string;
