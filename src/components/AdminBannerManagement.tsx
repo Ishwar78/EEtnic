@@ -124,7 +124,7 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
       imageUrl: "",
       ctaText: "Shop Now",
       ctaLink: "",
-      category: "bestsellers",
+      category: category || "bestsellers",
       isActive: true,
     });
     setEditingBanner(null);
