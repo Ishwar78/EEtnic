@@ -23,7 +23,7 @@ import {
 import { Plus, Edit, Trash2, Video, Loader2, Play, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
-import { parseVideoSource } from "@/lib/videoUtils";
+import { parseVideoSource, handleVideoError } from "@/lib/videoUtils";
 
 interface VideoItem {
   _id?: string;
