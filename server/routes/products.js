@@ -278,6 +278,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Delete product (admin)
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const product = await Product.findByIdAndDelete(req.params.id);
 
     if (!product) {
