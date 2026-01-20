@@ -1,6 +1,7 @@
 import express from 'express';
 import HeroMedia from '../models/HeroMedia.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
@@ -66,6 +67,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Update hero media
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid hero media ID' });
+    }
+
     const { title, subtitle, description, mediaUrl, mediaType, cta, ctaLink, order, isActive } = req.body;
 
     const media = await HeroMedia.findByIdAndUpdate(
@@ -102,6 +107,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Delete hero media
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid hero media ID' });
+    }
+
     const media = await HeroMedia.findByIdAndDelete(req.params.id);
 
     if (!media) {

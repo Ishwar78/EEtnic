@@ -1,6 +1,7 @@
 import express from 'express';
 import Product from '../models/Product.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
@@ -99,6 +100,10 @@ router.get('/slug/:slug', async (req, res) => {
 // Get single product by ID (public)
 router.get('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const product = await Product.findById(req.params.id).lean();
 
     if (!product) {
@@ -186,6 +191,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Update product (admin)
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const {
       name,
       description,
@@ -269,6 +278,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Delete product (admin)
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const product = await Product.findByIdAndDelete(req.params.id);
 
     if (!product) {

@@ -53,19 +53,17 @@ export default function ReviewShowcase() {
     return null;
   }
 
+  // Mobile: 1 item, Tablet: 2 items, Desktop: 4 items
   const itemsPerView = 4;
   const totalSlides = Math.ceil(reviews.length / itemsPerView);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    setCurrentIndex((prev) => (prev + 1) % reviews.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
   };
-
-  const startIndex = currentIndex * itemsPerView;
-  const visibleReviews = reviews.slice(startIndex, startIndex + itemsPerView);
 
   return (
     <section className="py-16 bg-gradient-to-b from-background via-accent/5 to-background">
@@ -80,51 +78,62 @@ export default function ReviewShowcase() {
           </p>
         </div>
 
-        {/* Reviews Grid */}
+        {/* Reviews Carousel */}
         <div className="relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {visibleReviews.map((review) => (
-              <div
-                key={review._id}
-                className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-              >
-                {/* Customer Image */}
-                <div className="relative h-64 overflow-hidden bg-muted">
-                  <img
-                    src={review.customerImage}
-                    alt={review.customerName}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-
-                {/* Review Content */}
-                <div className="p-4">
-                  <h3 className="font-semibold text-foreground mb-2 line-clamp-1">
-                    {review.customerName}
-                  </h3>
-
-                  {/* Rating */}
-                  <div className="flex gap-1 mb-3">
-                    {Array.from({ length: review.rating }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400"
+          {/* Carousel Container */}
+          <div className="overflow-hidden">
+            <div
+              className="flex gap-4 transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(calc(-${currentIndex} * (100% / 1) - ${currentIndex} * 1rem))`,
+              }}
+            >
+              {/* Mobile: 1 item */}
+              {reviews.map((review) => (
+                <div
+                  key={review._id}
+                  className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4"
+                >
+                  <div className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full">
+                    {/* Customer Image */}
+                    <div className="relative h-64 overflow-hidden bg-muted">
+                      <img
+                        src={review.customerImage}
+                        alt={review.customerName}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                    ))}
-                  </div>
+                    </div>
 
-                  {/* Review Text */}
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {review.reviewText}
-                  </p>
+                    {/* Review Content */}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-foreground mb-2 line-clamp-1">
+                        {review.customerName}
+                      </h3>
+
+                      {/* Rating */}
+                      <div className="flex gap-1 mb-3">
+                        {Array.from({ length: review.rating }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+
+                      {/* Review Text */}
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {review.reviewText}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Navigation Arrows */}
-          {totalSlides > 1 && (
-            <div className="flex items-center justify-between">
+          {reviews.length > 1 && (
+            <div className="flex items-center justify-between mt-8">
               <Button
                 variant="outline"
                 size="icon"
@@ -135,8 +144,8 @@ export default function ReviewShowcase() {
               </Button>
 
               {/* Indicators */}
-              <div className="flex gap-2">
-                {Array.from({ length: totalSlides }).map((_, i) => (
+              <div className="flex gap-2 flex-wrap justify-center">
+                {Array.from({ length: reviews.length }).map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}

@@ -1,6 +1,7 @@
 import express from 'express';
 import Ticket from '../models/Ticket.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
@@ -54,6 +55,10 @@ router.get('/my', authMiddleware, async (req, res) => {
 // User: Get a single ticket with details
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid ticket ID' });
+    }
+
     const ticket = await Ticket.findById(req.params.id);
 
     if (!ticket) {
@@ -61,7 +66,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 
     // Check if user owns this ticket or is admin
-    if (ticket.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (ticket.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
@@ -78,6 +83,10 @@ router.get('/:id', authMiddleware, async (req, res) => {
 // User: Add a response to their ticket
 router.post('/:id/respond', authMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid ticket ID' });
+    }
+
     const { message } = req.body;
 
     if (!message) {
@@ -91,7 +100,7 @@ router.post('/:id/respond', authMiddleware, async (req, res) => {
     }
 
     // Check if user owns this ticket
-    if (ticket.userId.toString() !== req.user._id.toString()) {
+    if (ticket.userId.toString() !== req.user._id) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 

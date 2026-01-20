@@ -4,6 +4,7 @@ import Order from '../models/Order.js';
 import Contact from '../models/Contact.js';
 import PaymentSettings from '../models/PaymentSettings.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 import bcrypt from 'bcryptjs';
 
 const router = express.Router();
@@ -101,6 +102,10 @@ router.get('/users', async (req, res) => {
 // Get single user
 router.get('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const user = await User.findById(req.params.id)
       .select('-password')
       .populate('wishlist');
@@ -126,11 +131,15 @@ router.get('/users/:id', async (req, res) => {
 // Update user
 router.put('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const { name, email, phone, address, role, isActive } = req.body;
 
     // Check email uniqueness if changed
     if (email) {
-      const existingUser = await User.findOne({ 
+      const existingUser = await User.findOne({
         email: email.toLowerCase(),
         _id: { $ne: req.params.id }
       });
@@ -171,6 +180,10 @@ router.put('/users/:id', async (req, res) => {
 // Delete user
 router.delete('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const user = await User.findByIdAndDelete(req.params.id);
 
     if (!user) {
@@ -193,6 +206,10 @@ router.delete('/users/:id', async (req, res) => {
 // Update user password (by admin)
 router.post('/users/:id/reset-password', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const { newPassword } = req.body;
 
     if (!newPassword || newPassword.length < 6) {

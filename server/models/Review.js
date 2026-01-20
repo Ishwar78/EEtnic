@@ -3,16 +3,13 @@ import mongoose from 'mongoose';
 const reviewSchema = new mongoose.Schema({
   customerName: {
     type: String,
-    required: true,
     trim: true
   },
   customerImage: {
-    type: String, // Base64 encoded image or image URL
-    required: true
+    type: String // Base64 encoded image or image URL
   },
   reviewText: {
-    type: String,
-    required: true
+    type: String
   },
   rating: {
     type: Number,

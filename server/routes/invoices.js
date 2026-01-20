@@ -3,6 +3,7 @@ import Invoice from '../models/Invoice.js';
 import Order from '../models/Order.js';
 import PaymentSettings from '../models/PaymentSettings.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
@@ -10,6 +11,10 @@ const router = express.Router();
 router.post('/:orderId', authMiddleware, async (req, res) => {
   try {
     const { orderId } = req.params;
+
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
 
     // Check if invoice already exists
     let invoice = await Invoice.findOne({ orderId });
@@ -30,7 +35,7 @@ router.post('/:orderId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization - only user who placed the order or admin
-    if (order.userId._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (order.userId._id.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
@@ -104,6 +109,10 @@ router.get('/order/:orderId', authMiddleware, async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const invoice = await Invoice.findOne({ orderId });
 
     if (!invoice) {
@@ -111,7 +120,7 @@ router.get('/order/:orderId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization
-    if (invoice.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (invoice.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
@@ -130,6 +139,10 @@ router.get('/:invoiceId', authMiddleware, async (req, res) => {
   try {
     const { invoiceId } = req.params;
 
+    if (!isValidObjectId(invoiceId)) {
+      return res.status(400).json({ error: 'Invalid invoice ID' });
+    }
+
     const invoice = await Invoice.findById(invoiceId);
 
     if (!invoice) {
@@ -137,7 +150,7 @@ router.get('/:invoiceId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization
-    if (invoice.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (invoice.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 

@@ -1,6 +1,7 @@
 import express from 'express';
 import Banner from '../models/Banner.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
@@ -67,6 +68,11 @@ router.post('/', authMiddleware, async (req, res) => {
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ success: false, error: 'Invalid banner ID' });
+    }
+
     const { title, subtitle, description, imageUrl, ctaText, ctaLink, category, isActive, order } = req.body;
 
     const banner = await Banner.findByIdAndUpdate(
@@ -99,6 +105,11 @@ router.put('/:id', authMiddleware, async (req, res) => {
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ success: false, error: 'Invalid banner ID' });
+    }
+
     const banner = await Banner.findByIdAndDelete(id);
 
     if (!banner) {
