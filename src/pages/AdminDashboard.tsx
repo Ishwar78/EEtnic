@@ -135,6 +135,7 @@ export default function AdminDashboard() {
     { value: 'invoices', label: 'Invoices' },
     { value: 'transactions', label: 'Transactions' },
     { value: 'size-charts', label: 'Size Charts' },
+    { value: 'reviews', label: 'Reviews' },
     { value: 'users', label: 'Users' },
     { value: 'orders', label: 'Orders' },
     { value: 'tickets', label: 'Tickets' },
