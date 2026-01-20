@@ -161,6 +161,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
         category: banner.category,
         isActive: banner.isActive,
       });
+      setImagePreview(banner.imageUrl);
+      setImageFile(null);
     } else {
       resetForm();
       // If viewing category-specific view, set the category
