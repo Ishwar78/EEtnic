@@ -139,6 +139,10 @@ router.get('/:invoiceId', authMiddleware, async (req, res) => {
   try {
     const { invoiceId } = req.params;
 
+    if (!isValidObjectId(invoiceId)) {
+      return res.status(400).json({ error: 'Invalid invoice ID' });
+    }
+
     const invoice = await Invoice.findById(invoiceId);
 
     if (!invoice) {
@@ -146,7 +150,7 @@ router.get('/:invoiceId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization
-    if (invoice.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (invoice.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
