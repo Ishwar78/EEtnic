@@ -17,7 +17,7 @@ export function normalizeProduct(p: any): Product {
     description: p.description || "",
     stock: typeof p.stock === "number" ? p.stock : 0,
     isActive: p.isActive !== false,
-    isNew: !!p.isNew,
+    isNew: !!p.isNewProduct || !!p.isNew,
     isBestseller: !!p.isBestseller,
     isSummer: !!p.isSummer,
     isWinter: !!p.isWinter,
