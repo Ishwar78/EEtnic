@@ -105,6 +105,11 @@ router.put('/:id', authMiddleware, async (req, res) => {
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ success: false, error: 'Invalid banner ID' });
+    }
+
     const banner = await Banner.findByIdAndDelete(id);
 
     if (!banner) {
