@@ -180,6 +180,10 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
 // Delete order (user can only delete their own orders, admin can delete any)
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const order = await Order.findById(req.params.id);
 
     if (!order) {
@@ -187,7 +191,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 
     // Check if user is the owner or admin
-    if (order.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (order.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
