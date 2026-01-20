@@ -206,6 +206,10 @@ router.delete('/users/:id', async (req, res) => {
 // Update user password (by admin)
 router.post('/users/:id/reset-password', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const { newPassword } = req.body;
 
     if (!newPassword || newPassword.length < 6) {
