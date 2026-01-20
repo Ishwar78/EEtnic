@@ -102,6 +102,10 @@ router.get('/users', async (req, res) => {
 // Get single user
 router.get('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const user = await User.findById(req.params.id)
       .select('-password')
       .populate('wishlist');
