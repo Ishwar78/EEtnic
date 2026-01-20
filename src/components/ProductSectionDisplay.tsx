@@ -69,19 +69,22 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
   const renderAsymmetricLayout = () => {
     if (section.productIds.length === 0) return null;
 
+    // First product is large (left side)
     const firstProduct = section.productIds[0];
-    const remainingProducts = section.productIds.slice(1);
-    const smallProducts = remainingProducts.slice(0, 4); // Show 4 products in 2x2 grid
+    // Next 6 products in 2 rows of 3 (right side)
+    const smallProducts = section.productIds.slice(1, 7);
 
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Large Product */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        {/* Large Product - Left Side */}
         <div className="lg:col-span-1 lg:row-span-2">
-          <ProductCard product={firstProduct} />
+          <div className="h-full">
+            <ProductCard product={firstProduct} />
+          </div>
         </div>
 
-        {/* Small Products Grid */}
-        <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+        {/* Small Products Grid - Right Side (2 rows x 3 cols) */}
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {smallProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
