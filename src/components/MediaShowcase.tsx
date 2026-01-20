@@ -343,14 +343,14 @@ const MediaShowcase = () => {
     };
   }, [emblaApi, onSelect]);
 
-  // Auto-scroll every 4 seconds
-  useEffect(() => {
-    if (!emblaApi) return;
-    const interval = setInterval(() => {
-      emblaApi.scrollNext();
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [emblaApi]);
+  // Auto-scroll disabled - manual navigation only
+  // useEffect(() => {
+  //   if (!emblaApi) return;
+  //   const interval = setInterval(() => {
+  //     emblaApi.scrollNext();
+  //   }, 4000);
+  //   return () => clearInterval(interval);
+  // }, [emblaApi]);
 
   const getDiscount = (original: number, current: number) => {
     return Math.round(((original - current) / original) * 100);
