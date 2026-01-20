@@ -310,7 +310,8 @@ const MediaShowcase = () => {
         setMediaItems(transformedVideos);
       }
     } catch (error) {
-      console.error('Error fetching videos:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Error fetching videos:', errorMessage);
       // Keep fallback videos on error
     } finally {
       setIsLoading(false);
