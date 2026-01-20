@@ -31,6 +31,7 @@ import SizeChartManagement from "@/components/SizeChartManagement";
 import InvoiceDisplay from "@/components/InvoiceDisplay";
 import AdminInvoiceManagement from "@/components/AdminInvoiceManagement";
 import AdminTransactionManagement from "@/components/AdminTransactionManagement";
+import AdminReviewManagement from "@/components/AdminReviewManagement";
 
 interface DashboardStats {
   totalUsers: number;
