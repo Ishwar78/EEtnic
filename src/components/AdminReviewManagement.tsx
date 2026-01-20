@@ -84,10 +84,6 @@ export default function AdminReviewManagement() {
   };
 
   const handleSave = async () => {
-    if (!formData.customerName || !formData.customerImage || !formData.reviewText) {
-      toast.error("All fields are required");
-      return;
-    }
 
     try {
       const method = editingReview ? 'PUT' : 'POST';
