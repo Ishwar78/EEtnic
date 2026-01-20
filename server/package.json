@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node --watch index.js",
     "start": "node index.js",
-    "seed": "node scripts/seedAdmin.js"
+    "seed": "node scripts/seedAdmin.js",
+    "seed:diwali": "node scripts/seedDiwaliSale.js"
   },
   "keywords": [],
   "author": "",
