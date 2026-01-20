@@ -56,6 +56,7 @@ const Index = () => {
           <AvailableCoupons />
           <CollectionsSection />
           <FeaturedProducts />
+          <ReviewShowcase />
         </main>
         <Footer />
         <WhatsAppButton />
