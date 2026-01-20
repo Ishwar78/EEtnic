@@ -58,7 +58,7 @@ export default function NewArrivals() {
             title="New Arrivals"
             subtitle="Fresh & Latest Designs"
             tagline="Exclusively Curated for You"
-            backgroundImage="https://images.unsplash.com/photo-1626327957914-28bfbf68a57d?w=1600&q=80&fit=crop"
+            backgroundImage={banner?.imageUrl || "https://images.unsplash.com/photo-1626327957914-28bfbf68a57d?w=1600&q=80&fit=crop"}
             backgroundColor="bg-gradient-to-br from-gold/15 via-accent/5 to-background"
             productCount={products.length}
           />
