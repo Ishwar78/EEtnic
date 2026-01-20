@@ -114,7 +114,7 @@ const AdminProductSectionManagement = () => {
 
   const handleEdit = (section: ProductSection) => {
     setEditingSection(section);
-    const productIds = section.productIds.map(p => 
+    const productIds = section.productIds.map(p =>
       typeof p === 'string' ? p : p._id
     );
     setFormData({
@@ -123,6 +123,7 @@ const AdminProductSectionManagement = () => {
       subheading: section.subheading || "",
       productIds,
       displayLayout: section.displayLayout,
+      backgroundImage: section.backgroundImage || "",
       isActive: section.isActive,
       displayOrder: section.displayOrder,
     });
