@@ -181,15 +181,12 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
 
   return (
     <section
-      className="py-12 md:py-20 relative"
+      className={`py-12 md:py-20 relative ${!section.backgroundImage ? 'bg-gradient-to-br from-background via-primary/5 to-background' : ''}`}
       style={section.backgroundImage ? {
         backgroundImage: `url('${section.backgroundImage}')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      } : {
-        background: 'linear-gradient(to bottom right, var(--background), rgba(var(--primary), 0.05), var(--background))'
-      }}
+        backgroundPosition: 'center'
+      } : undefined}
     >
       {/* Overlay for text readability */}
       {section.backgroundImage && (
