@@ -72,6 +72,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Admin endpoint - Update review
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid review ID' });
+    }
+
     const { customerName, customerImage, reviewText, rating, isActive, order } = req.body;
 
     const review = await Review.findByIdAndUpdate(
@@ -105,6 +109,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Admin endpoint - Delete review
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid review ID' });
+    }
+
     const review = await Review.findByIdAndDelete(req.params.id);
 
     if (!review) {
@@ -131,8 +139,12 @@ router.put('/reorder/all', authMiddleware, adminMiddleware, async (req, res) => 
     }
 
     for (let i = 0; i < reviews.length; i++) {
+      const reviewId = reviews[i]._id || reviews[i].id;
+      if (!isValidObjectId(reviewId)) {
+        return res.status(400).json({ error: `Invalid review ID at index ${i}` });
+      }
       await Review.findByIdAndUpdate(
-        reviews[i]._id || reviews[i].id,
+        reviewId,
         { order: i }
       );
     }
