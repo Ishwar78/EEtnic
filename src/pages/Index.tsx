@@ -5,6 +5,7 @@ import TrendingProducts from "@/components/TrendingProducts";
 import MediaShowcase from "@/components/MediaShowcase";
 import CollectionsSection from "@/components/CollectionsSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ReviewShowcase from "@/components/ReviewShowcase";
 import TrustBadges from "@/components/TrustBadges";
 import AvailableCoupons from "@/components/AvailableCoupons";
 import Footer from "@/components/Footer";
