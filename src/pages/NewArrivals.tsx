@@ -32,7 +32,8 @@ export default function NewArrivals() {
           setProducts(mapped);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('Error fetching products:', errorMessage);
       } finally {
         setIsLoading(false);
       }
