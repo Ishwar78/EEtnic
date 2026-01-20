@@ -174,6 +174,21 @@ const AdminProductSectionManagement = () => {
     }));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setFormData(prev => ({
+        ...prev,
+        backgroundImage: dataUrl
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   if (isLoading) {
     return <div className="p-6 text-center">Loading...</div>;
   }
