@@ -183,9 +183,9 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.title || !formData.subtitle || !formData.imageUrl || !formData.ctaLink) {
-      toast.error("Title, subtitle, image URL, and CTA link are required");
+
+    if (!formData.imageUrl) {
+      toast.error("Banner image is required");
       return;
     }
 
@@ -511,14 +511,14 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
 
       {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>{editingBanner ? "Edit Banner" : "Add New Banner"}</DialogTitle>
             <DialogDescription>
               {editingBanner ? "Update the banner details below" : "Fill in the details for the new banner"}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 flex-1 overflow-y-auto pr-4">
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
               {category ? (
@@ -546,23 +546,21 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Title Tag *</Label>
+                <Label htmlFor="title">Title Tag</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g., New Arrivals"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="subtitle">Subtitle (Main Heading) *</Label>
+                <Label htmlFor="subtitle">Subtitle (Main Heading)</Label>
                 <Input
                   id="subtitle"
                   value={formData.subtitle}
                   onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                   placeholder="e.g., Festive Suit Collection"
-                  required
                 />
               </div>
             </div>
@@ -646,13 +644,12 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="ctaLink">Button Link *</Label>
+                <Label htmlFor="ctaLink">Button Link</Label>
                 <Input
                   id="ctaLink"
                   value={formData.ctaLink}
                   onChange={(e) => setFormData({ ...formData, ctaLink: e.target.value })}
                   placeholder="e.g., /shop?category=new"
-                  required
                 />
               </div>
             </div>
@@ -666,7 +663,7 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
               <Label htmlFor="isActive">Banner is active and visible</Label>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="mt-4 pt-4 border-t">
               <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={isSaving}>
                 Cancel
               </Button>
