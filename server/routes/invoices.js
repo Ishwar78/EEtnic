@@ -109,6 +109,10 @@ router.get('/order/:orderId', authMiddleware, async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const invoice = await Invoice.findOne({ orderId });
 
     if (!invoice) {
@@ -116,7 +120,7 @@ router.get('/order/:orderId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization
-    if (invoice.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (invoice.userId.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
