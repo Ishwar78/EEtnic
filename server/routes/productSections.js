@@ -100,6 +100,7 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
       subheading,
       productIds,
       displayLayout,
+      backgroundImage,
       isActive,
       displayOrder,
     } = req.body;
@@ -108,12 +109,15 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Name and heading are required' });
     }
 
+    console.log(`Creating product section: name=${name}, heading=${heading}, products=${productIds?.length || 0}`);
+
     const section = new ProductSection({
       name,
       heading,
       subheading,
       productIds: productIds || [],
       displayLayout,
+      backgroundImage,
       isActive,
       displayOrder,
     });
@@ -121,6 +125,7 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
     await section.save();
     await section.populate('productIds');
 
+    console.log(`Product section created successfully: ${section._id}`);
     res.status(201).json({
       success: true,
       section,
