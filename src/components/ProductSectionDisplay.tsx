@@ -180,8 +180,23 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
   };
 
   return (
-    <section className="py-12 md:py-20 bg-gradient-to-br from-background via-primary/5 to-background">
-      <div className="container mx-auto px-4">
+    <section
+      className="py-12 md:py-20 relative"
+      style={section.backgroundImage ? {
+        backgroundImage: `url('${section.backgroundImage}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      } : {
+        background: 'linear-gradient(to bottom right, var(--background), rgba(var(--primary), 0.05), var(--background))'
+      }}
+    >
+      {/* Overlay for text readability */}
+      {section.backgroundImage && (
+        <div className="absolute inset-0 bg-black/20" />
+      )}
+
+      <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3">
