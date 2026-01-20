@@ -571,6 +571,11 @@ export default function AdminDashboard() {
               <AdminCollectionManagement />
             </TabsContent>
 
+            {/* Product Sections Tab */}
+            <TabsContent value="product-sections" className="space-y-6">
+              <AdminProductSectionManagement />
+            </TabsContent>
+
             {/* Products Tab */}
             <TabsContent value="products" className="space-y-6">
               <ProductManagement />
