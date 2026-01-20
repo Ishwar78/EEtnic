@@ -19,6 +19,7 @@ interface ProductSection {
   subheading?: string;
   productIds: Product[];
   displayLayout: string;
+  backgroundImage?: string;
 }
 
 interface ProductSectionDisplayProps {
