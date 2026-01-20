@@ -46,6 +46,10 @@ router.get('/admin/all', authMiddleware, adminMiddleware, async (req, res) => {
 // Get single category (public)
 router.get('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid category ID' });
+    }
+
     const category = await Category.findById(req.params.id)
       .populate('parentId', 'name slug')
       .lean();
@@ -110,6 +114,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Update category (admin)
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid category ID' });
+    }
+
     const {
       name,
       slug,
@@ -158,6 +166,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Delete category (admin)
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid category ID' });
+    }
+
     // Check if category has subcategories
     const hasSubcategories = await Category.findOne({ parentId: req.params.id });
     if (hasSubcategories) {
