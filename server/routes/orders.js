@@ -112,6 +112,10 @@ router.get('/track/:trackingId', async (req, res) => {
 // Get single order
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const order = await Order.findById(req.params.id)
       .populate('userId', 'name email phone')
       .populate('items.productId', 'name price image');
@@ -121,7 +125,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 
     // Check if user is the owner of the order or an admin
-    if (order.userId._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (order.userId._id.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
