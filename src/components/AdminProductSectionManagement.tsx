@@ -15,6 +15,7 @@ interface ProductSection {
   subheading?: string;
   productIds: (string | Product)[];
   displayLayout: string;
+  backgroundImage?: string;
   isActive: boolean;
   displayOrder: number;
 }
