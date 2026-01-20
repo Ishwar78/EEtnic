@@ -25,13 +25,22 @@ router.get('/', async (req, res) => {
 // Get single section by name (public)
 router.get('/name/:name', async (req, res) => {
   try {
+    console.log(`Fetching product section with name: ${req.params.name}`);
     const section = await ProductSection.findOne({ name: req.params.name, isActive: true })
       .populate('productIds');
 
     if (!section) {
+      console.log(`Section not found with name: ${req.params.name}. Checking all sections...`);
+      // Try without isActive filter for debugging
+      const allSections = await ProductSection.find({ name: req.params.name });
+      console.log(`Sections found (all): ${allSections.length}`);
+      allSections.forEach(s => {
+        console.log(`  - Name: ${s.name}, Active: ${s.isActive}, Products: ${s.productIds.length}`);
+      });
       return res.status(404).json({ error: 'Section not found' });
     }
 
+    console.log(`Section found: ${section.name}, Products: ${section.productIds.length}`);
     res.json({
       success: true,
       section,
