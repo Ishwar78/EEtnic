@@ -100,6 +100,10 @@ router.get('/slug/:slug', async (req, res) => {
 // Get single product by ID (public)
 router.get('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const product = await Product.findById(req.params.id).lean();
 
     if (!product) {
