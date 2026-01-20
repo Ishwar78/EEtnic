@@ -5,9 +5,9 @@ import TrendingProducts from "@/components/TrendingProducts";
 import MediaShowcase from "@/components/MediaShowcase";
 import CollectionsSection from "@/components/CollectionsSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ReviewShowcase from "@/components/ReviewShowcase";
 import TrustBadges from "@/components/TrustBadges";
 import AvailableCoupons from "@/components/AvailableCoupons";
-import BannerSection from "@/components/BannerSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 const Index = () => {
@@ -51,12 +51,12 @@ const Index = () => {
         <main>
           <HeroSlider />
           <TrustBadges />
-          <BannerSection />
           <TrendingProducts />
           <MediaShowcase />
           <AvailableCoupons />
           <CollectionsSection />
           <FeaturedProducts />
+          <ReviewShowcase />
         </main>
         <Footer />
         <WhatsAppButton />
