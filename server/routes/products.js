@@ -243,7 +243,7 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
         stockByColor,
         rating,
         isActive,
-        isNew,
+        isNewProduct,
         isBestseller,
         isSummer,
         isWinter,
