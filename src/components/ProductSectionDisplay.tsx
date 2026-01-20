@@ -35,9 +35,24 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
       try {
         setIsLoading(true);
         const API_URL = import.meta.env.VITE_API_URL || '/api';
-        const response = await fetch(`${API_URL}/product-sections/name/${sectionName}`);
 
-        if (response.ok) {
+        // First try to fetch by name
+        let response = await fetch(`${API_URL}/product-sections/name/${sectionName}`);
+
+        // If not found by name, fetch all sections and find by name (case-insensitive)
+        if (!response.ok) {
+          response = await fetch(`${API_URL}/product-sections`);
+          if (response.ok) {
+            const data = await response.json();
+            const foundSection = data.sections?.find(
+              s => s.name.toLowerCase() === sectionName.toLowerCase()
+            );
+            if (foundSection) {
+              setSection(foundSection);
+              return;
+            }
+          }
+        } else {
           const data = await response.json();
           setSection(data.section);
         }
