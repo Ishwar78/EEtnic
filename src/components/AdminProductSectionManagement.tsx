@@ -159,6 +159,7 @@ const AdminProductSectionManagement = () => {
       subheading: "",
       productIds: [],
       displayLayout: "asymmetric",
+      backgroundImage: "",
       isActive: true,
       displayOrder: 0,
     });
