@@ -16,6 +16,8 @@ import invoicesRoutes from './routes/invoices.js';
 import videosRoutes from './routes/videos.js';
 import bannersRoutes from './routes/banners.js';
 import reviewsRoutes from './routes/reviews.js';
+import offersRoutes from './routes/offers.js';
+import collectionsRoutes from './routes/collections.js';
 import User from './models/User.js';
 import Contact from './models/Contact.js';
 import HeroMedia from './models/HeroMedia.js';
