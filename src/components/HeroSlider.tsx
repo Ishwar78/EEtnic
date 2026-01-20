@@ -110,10 +110,11 @@ export default function HeroSlider() {
     goToSlide((currentSlide - 1 + slides.length) % slides.length);
   }, [currentSlide, goToSlide]);
 
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 6000);
-    return () => clearInterval(interval);
-  }, [nextSlide]);
+  // Auto-scroll disabled - manual navigation only
+  // useEffect(() => {
+  //   const interval = setInterval(nextSlide, 6000);
+  //   return () => clearInterval(interval);
+  // }, [nextSlide]);
 
   return (
     <section className="relative h-screen min-h-[600px] overflow-hidden bg-gradient-hero">
