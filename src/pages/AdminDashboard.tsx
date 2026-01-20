@@ -129,6 +129,8 @@ export default function AdminDashboard() {
     { value: 'overview', label: 'Overview' },
     { value: 'hero-media', label: 'Hero Slider' },
     { value: 'videos', label: 'Trending Videos' },
+    { value: 'offers', label: 'Offers' },
+    { value: 'collections', label: 'Collections' },
     { value: 'products', label: 'Products' },
     { value: 'categories', label: 'Categories' },
     { value: 'coupons', label: 'Coupons' },
