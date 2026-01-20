@@ -149,9 +149,12 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
       subheading,
       productIds,
       displayLayout,
+      backgroundImage,
       isActive,
       displayOrder,
     } = req.body;
+
+    console.log(`Updating product section: ${req.params.id}, products=${productIds?.length || 0}`);
 
     const section = await ProductSection.findByIdAndUpdate(
       req.params.id,
@@ -161,6 +164,7 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
         subheading,
         productIds,
         displayLayout,
+        backgroundImage,
         isActive,
         displayOrder,
         updatedAt: new Date(),
@@ -172,6 +176,7 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
       return res.status(404).json({ error: 'Section not found' });
     }
 
+    console.log(`Product section updated successfully: ${section._id}`);
     res.json({
       success: true,
       section,
