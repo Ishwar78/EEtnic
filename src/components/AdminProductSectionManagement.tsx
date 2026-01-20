@@ -80,7 +80,7 @@ const AdminProductSectionManagement = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem(AUTH_STORAGE_KEY);
 
     try {
       const url = editingSection
