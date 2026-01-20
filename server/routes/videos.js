@@ -44,12 +44,16 @@ router.get('/admin/all', authMiddleware, adminMiddleware, async (req, res) => {
 // Get single video
 router.get('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid video ID' });
+    }
+
     const video = await Video.findById(req.params.id).lean();
-    
+
     if (!video) {
       return res.status(404).json({ error: 'Video not found' });
     }
-    
+
     res.json({
       success: true,
       video,
@@ -108,6 +112,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Update video (admin)
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid video ID' });
+    }
+
     const {
       title,
       description,
@@ -156,6 +164,10 @@ router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 // Delete video (admin)
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid video ID' });
+    }
+
     const video = await Video.findByIdAndDelete(req.params.id);
 
     if (!video) {
@@ -172,30 +184,5 @@ router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
-// Reorder videos (admin)
-router.put('/reorder/all', authMiddleware, adminMiddleware, async (req, res) => {
-  try {
-    const { videos } = req.body;
-
-    if (!Array.isArray(videos)) {
-      return res.status(400).json({ error: 'Videos must be an array' });
-    }
-
-    // Update order for each video
-    await Promise.all(
-      videos.map((video, index) =>
-        Video.findByIdAndUpdate(video._id || video.id, { order: index })
-      )
-    );
-
-    res.json({
-      success: true,
-      message: 'Videos reordered successfully',
-    });
-  } catch (error) {
-    console.error('Error reordering videos:', error);
-    res.status(500).json({ error: 'Failed to reorder videos' });
-  }
-});
 
 export default router;
