@@ -36,29 +36,34 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
         setIsLoading(true);
         const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-        // First try to fetch by name
-        let response = await fetch(`${API_URL}/product-sections/name/${sectionName}`);
+        console.log(`[ProductSectionDisplay] Fetching section: ${sectionName}`);
 
-        // If not found by name, fetch all sections and find by name (case-insensitive)
-        if (!response.ok) {
-          response = await fetch(`${API_URL}/product-sections`);
-          if (response.ok) {
-            const data = await response.json();
-            const foundSection = data.sections?.find(
-              s => s.name.toLowerCase() === sectionName.toLowerCase()
+        // Always fetch all sections first (most reliable method)
+        const response = await fetch(`${API_URL}/product-sections`);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`[ProductSectionDisplay] Found ${data.sections?.length || 0} sections`);
+
+          // Find section by name (case-insensitive)
+          const foundSection = data.sections?.find(
+            s => s.name.toLowerCase() === sectionName.toLowerCase()
+          );
+
+          if (foundSection) {
+            console.log(`[ProductSectionDisplay] Section found: ${foundSection.name}, Products: ${foundSection.productIds?.length || 0}`);
+            setSection(foundSection);
+          } else {
+            console.log(`[ProductSectionDisplay] Section not found. Available sections:`,
+              data.sections?.map(s => ({ name: s.name, products: s.productIds?.length }))
             );
-            if (foundSection) {
-              setSection(foundSection);
-              return;
-            }
           }
         } else {
-          const data = await response.json();
-          setSection(data.section);
+          console.error(`[ProductSectionDisplay] Failed to fetch sections: ${response.status}`);
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error('Error fetching product section:', errorMessage);
+        console.error('[ProductSectionDisplay] Error fetching product section:', errorMessage);
       } finally {
         setIsLoading(false);
       }
