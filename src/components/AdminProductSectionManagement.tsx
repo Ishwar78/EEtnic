@@ -31,6 +31,7 @@ const AdminProductSectionManagement = () => {
     subheading: "",
     productIds: [] as string[],
     displayLayout: "asymmetric",
+    backgroundImage: "",
     isActive: true,
     displayOrder: 0,
   });
