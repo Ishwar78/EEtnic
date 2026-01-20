@@ -32,6 +32,8 @@ import InvoiceDisplay from "@/components/InvoiceDisplay";
 import AdminInvoiceManagement from "@/components/AdminInvoiceManagement";
 import AdminTransactionManagement from "@/components/AdminTransactionManagement";
 import AdminReviewManagement from "@/components/AdminReviewManagement";
+import AdminOfferManagement from "@/components/AdminOfferManagement";
+import AdminCollectionManagement from "@/components/AdminCollectionManagement";
 
 interface DashboardStats {
   totalUsers: number;
@@ -127,6 +129,8 @@ export default function AdminDashboard() {
     { value: 'overview', label: 'Overview' },
     { value: 'hero-media', label: 'Hero Slider' },
     { value: 'videos', label: 'Trending Videos' },
+    { value: 'offers', label: 'Offers' },
+    { value: 'collections', label: 'Collections' },
     { value: 'products', label: 'Products' },
     { value: 'categories', label: 'Categories' },
     { value: 'coupons', label: 'Coupons' },
@@ -553,6 +557,16 @@ export default function AdminDashboard() {
             {/* Videos Tab */}
             <TabsContent value="videos" className="space-y-6">
               <AdminVideoManagement />
+            </TabsContent>
+
+            {/* Offers Tab */}
+            <TabsContent value="offers" className="space-y-6">
+              <AdminOfferManagement />
+            </TabsContent>
+
+            {/* Collections Tab */}
+            <TabsContent value="collections" className="space-y-6">
+              <AdminCollectionManagement />
             </TabsContent>
 
             {/* Products Tab */}

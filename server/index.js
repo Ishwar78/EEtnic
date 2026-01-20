@@ -16,6 +16,8 @@ import invoicesRoutes from './routes/invoices.js';
 import videosRoutes from './routes/videos.js';
 import bannersRoutes from './routes/banners.js';
 import reviewsRoutes from './routes/reviews.js';
+import offersRoutes from './routes/offers.js';
+import collectionsRoutes from './routes/collections.js';
 import User from './models/User.js';
 import Contact from './models/Contact.js';
 import HeroMedia from './models/HeroMedia.js';
@@ -228,6 +230,8 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/banners', bannersRoutes);
 app.use('/api/reviews', reviewsRoutes);
+app.use('/api/offers', offersRoutes);
+app.use('/api/collections', collectionsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

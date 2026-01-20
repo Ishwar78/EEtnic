@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import CollectionLayout from "@/components/CollectionLayout";
 import { normalizeProduct } from "@/lib/normalizeProduct";
+import { useBanner } from "@/hooks/useBanner";
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function Bestsellers() {
   const [bestsellers, setBestsellers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { banner } = useBanner("bestseller");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,7 +25,8 @@ export default function Bestsellers() {
           setBestsellers([]);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Error fetching products:", errorMessage);
         setBestsellers([]);
       } finally {
         setIsLoading(false);
@@ -42,7 +45,7 @@ export default function Bestsellers() {
       metaDescription="Shop our bestselling ethnic wear collection. Customer favorites with premium quality and stunning designs. Free shipping above ₹999."
       products={bestsellers}
       showTrending
-      bannerImage="https://images.unsplash.com/photo-1595777712802-14b700b0535e?w=1600&q=80&fit=crop"
+      bannerImage={banner?.imageUrl || "https://images.unsplash.com/photo-1595777712802-14b700b0535e?w=1600&q=80&fit=crop"}
       bannerBgColor="bg-gradient-to-br from-primary/15 via-accent/5 to-background"
     />
   );

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import CollectionLayout from "@/components/CollectionLayout";
 import { westernSubcategories } from "@/data/products";
 import { normalizeProduct } from "@/lib/normalizeProduct";
+import { useBanner } from "@/hooks/useBanner";
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function WesternWear() {
   const [westernProducts, setWesternProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { banner } = useBanner("western_wear");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,7 +35,8 @@ export default function WesternWear() {
         const mapped = (data.products || []).map((p: any) => normalizeProduct(p));
         setWesternProducts(mapped);
       } catch (error) {
-        console.error("Error fetching western wear products:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Error fetching western wear products:", errorMessage);
         if (error instanceof TypeError) {
           console.error("Network error - API may be unreachable at:", API_URL);
         }
@@ -57,7 +60,7 @@ export default function WesternWear() {
       metaDescription="Shop our western wear collection. Trendy tops, dresses, co-ord sets, and casual wear. Free shipping above ₹999."
       products={westernProducts}
       filterCategories={filterCategories}
-      bannerImage="https://images.unsplash.com/photo-1595592834986-c67ee1dbe3d5?w=1600&q=80&fit=crop"
+      bannerImage={banner?.imageUrl || "https://images.unsplash.com/photo-1595592834986-c67ee1dbe3d5?w=1600&q=80&fit=crop"}
       bannerBgColor="bg-gradient-to-br from-secondary/15 via-accent/5 to-background"
     />
   );

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import CollectionLayout from "@/components/CollectionLayout";
 import { ethnicSubcategories } from "@/data/products";
 import { normalizeProduct } from "@/lib/normalizeProduct";
+import { useBanner } from "@/hooks/useBanner";
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function EthnicWear() {
   const [ethnicProducts, setEthnicProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { banner } = useBanner("ethnic_wear");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,7 +35,8 @@ export default function EthnicWear() {
         const mapped = (data.products || []).map((p: any) => normalizeProduct(p));
         setEthnicProducts(mapped);
       } catch (error) {
-        console.error("Error fetching ethnic wear products:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Error fetching ethnic wear products:", errorMessage);
         if (error instanceof TypeError) {
           console.error("Network error - API may be unreachable at:", API_URL);
         }
@@ -57,7 +60,7 @@ export default function EthnicWear() {
       metaDescription="Explore our exclusive ethnic wear collection. Shop kurta sets, anarkali suits, lehengas, and festive wear with free shipping above ₹999."
       products={ethnicProducts}
       filterCategories={filterCategories}
-      bannerImage="https://images.unsplash.com/photo-1610706406159-b21bd25c5e9c?w=1600&q=80&fit=crop"
+      bannerImage={banner?.imageUrl || "https://images.unsplash.com/photo-1610706406159-b21bd25c5e9c?w=1600&q=80&fit=crop"}
       bannerBgColor="bg-gradient-to-br from-burgundy/15 via-gold/5 to-background"
     />
   );

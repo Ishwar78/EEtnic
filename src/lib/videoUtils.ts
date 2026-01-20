@@ -240,9 +240,8 @@ export function handleVideoError(e: Event, url?: string): void {
   const target = e.target as HTMLVideoElement;
   const errorMessage = getVideoErrorMessage(target.error, url);
 
-  console.error('Video load error:', {
+  console.error('Video load error:', errorMessage, {
     url: url || target.src,
-    message: errorMessage,
     code: target.error?.code,
   });
 }

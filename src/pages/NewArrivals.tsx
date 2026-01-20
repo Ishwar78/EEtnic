@@ -8,12 +8,14 @@ import CollectionBanner from "@/components/CollectionBanner";
 import ProductCarousel from "@/components/ProductCarousel";
 import { Product } from "@/data/products";
 import { normalizeProduct } from "@/lib/normalizeProduct";
+import { useBanner } from "@/hooks/useBanner";
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function NewArrivals() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { banner } = useBanner("new_arrival");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,12 +29,13 @@ export default function NewArrivals() {
 
         const data = await response.json();
         if (data.success || data.products) {
-          const filtered = (data.products || []).filter((p: any) => p.isNew);
+          const filtered = (data.products || []).filter((p: any) => p.isNewProduct || p.isNew);
           const mapped = filtered.map((p: any) => normalizeProduct(p));
           setProducts(mapped);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('Error fetching products:', errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +58,7 @@ export default function NewArrivals() {
             title="New Arrivals"
             subtitle="Fresh & Latest Designs"
             tagline="Exclusively Curated for You"
-            backgroundImage="https://images.unsplash.com/photo-1626327957914-28bfbf68a57d?w=1600&q=80&fit=crop"
+            backgroundImage={banner?.imageUrl || "https://images.unsplash.com/photo-1626327957914-28bfbf68a57d?w=1600&q=80&fit=crop"}
             backgroundColor="bg-gradient-to-br from-gold/15 via-accent/5 to-background"
             productCount={products.length}
           />
