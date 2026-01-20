@@ -132,6 +132,7 @@ export default function AdminDashboard() {
     { value: 'videos', label: 'Trending Videos' },
     { value: 'offers', label: 'Offers' },
     { value: 'collections', label: 'Collections' },
+    { value: 'product-sections', label: 'Product Sections' },
     { value: 'products', label: 'Products' },
     { value: 'categories', label: 'Categories' },
     { value: 'coupons', label: 'Coupons' },
