@@ -8,12 +8,14 @@ import CollectionBanner from "@/components/CollectionBanner";
 import ProductCarousel from "@/components/ProductCarousel";
 import { Product } from "@/data/products";
 import { normalizeProduct } from "@/lib/normalizeProduct";
+import { useBanner } from "@/hooks/useBanner";
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function NewArrivals() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { banner } = useBanner("new_arrival");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,7 +29,7 @@ export default function NewArrivals() {
 
         const data = await response.json();
         if (data.success || data.products) {
-          const filtered = (data.products || []).filter((p: any) => p.isNew);
+          const filtered = (data.products || []).filter((p: any) => p.isNewProduct || p.isNew);
           const mapped = filtered.map((p: any) => normalizeProduct(p));
           setProducts(mapped);
         }
