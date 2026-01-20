@@ -129,7 +129,7 @@ const AdminProductSectionManagement = () => {
   const handleDelete = async (sectionId: string) => {
     if (!confirm("Are you sure you want to delete this section?")) return;
 
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem(AUTH_STORAGE_KEY);
 
     try {
       const response = await fetch(`${API_URL}/product-sections/${sectionId}`, {
