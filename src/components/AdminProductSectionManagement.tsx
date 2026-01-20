@@ -297,6 +297,29 @@ const AdminProductSectionManagement = () => {
             </div>
           </div>
 
+          {/* Background Image Upload */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Section Background Image</label>
+            <div className="flex items-center gap-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="flex-1 px-3 py-2 border rounded-md"
+              />
+              {formData.backgroundImage && (
+                <div className="w-20 h-20 rounded-md overflow-hidden border">
+                  <img
+                    src={formData.backgroundImage}
+                    alt="Background preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Upload an image for section background (optional)</p>
+          </div>
+
           {/* Products Selection */}
           <div>
             <label className="block text-sm font-medium mb-3">Select Products *</label>
