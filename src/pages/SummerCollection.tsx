@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 export default function SummerCollection() {
   const [summerProducts, setSummerProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { banner } = useBanner("summer");
+  const { banner } = useBanner("summer_collection");
 
   useEffect(() => {
     const fetchProducts = async () => {
