@@ -35,6 +35,7 @@ const AdminProductSectionManagement = () => {
   });
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
+  const AUTH_STORAGE_KEY = "vasstra_auth_token";
 
   useEffect(() => {
     fetchSections();
@@ -44,7 +45,7 @@ const AdminProductSectionManagement = () => {
   const fetchSections = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem(AUTH_STORAGE_KEY);
       const response = await fetch(`${API_URL}/product-sections/admin/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
