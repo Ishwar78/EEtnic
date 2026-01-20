@@ -41,8 +41,8 @@ router.post('/', authMiddleware, async (req, res) => {
   try {
     const { title, subtitle, description, imageUrl, ctaText, ctaLink, category, isActive, order } = req.body;
 
-    if (!title || !subtitle || !imageUrl || !category || !ctaLink) {
-      return res.status(400).json({ success: false, error: 'Required fields missing' });
+    if (!imageUrl || !category) {
+      return res.status(400).json({ success: false, error: 'Banner image and category are required' });
     }
 
     const banner = new Banner({
