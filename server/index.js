@@ -230,6 +230,8 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/banners', bannersRoutes);
 app.use('/api/reviews', reviewsRoutes);
+app.use('/api/offers', offersRoutes);
+app.use('/api/collections', collectionsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
