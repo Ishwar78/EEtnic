@@ -1,6 +1,7 @@
 import express from 'express';
 import Product from '../models/Product.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { isValidObjectId } from '../utils/validation.js';
 
 const router = express.Router();
 
