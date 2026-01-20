@@ -86,7 +86,7 @@ const productSchema = new mongoose.Schema({
       default: Date.now
     }
   }],
-  isNew: {
+  isNewProduct: {
     type: Boolean,
     default: false
   },
