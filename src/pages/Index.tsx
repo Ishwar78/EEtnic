@@ -54,6 +54,7 @@ const Index = () => {
         <main>
           <HeroSlider />
           <OfferSection />
+          <ProductSectionDisplay sectionName="holi-sale" />
           <TrustBadges />
           <TrendingProducts />
           <CollectionShowcase />
