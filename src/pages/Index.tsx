@@ -1,7 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSlider from "@/components/HeroSlider";
+import OfferSection from "@/components/OfferSection";
 import TrendingProducts from "@/components/TrendingProducts";
+import CollectionShowcase from "@/components/CollectionShowcase";
 import MediaShowcase from "@/components/MediaShowcase";
 import CollectionsSection from "@/components/CollectionsSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
