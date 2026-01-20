@@ -53,19 +53,17 @@ export default function ReviewShowcase() {
     return null;
   }
 
+  // Mobile: 1 item, Tablet: 2 items, Desktop: 4 items
   const itemsPerView = 4;
   const totalSlides = Math.ceil(reviews.length / itemsPerView);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    setCurrentIndex((prev) => (prev + 1) % reviews.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
   };
-
-  const startIndex = currentIndex * itemsPerView;
-  const visibleReviews = reviews.slice(startIndex, startIndex + itemsPerView);
 
   return (
     <section className="py-16 bg-gradient-to-b from-background via-accent/5 to-background">
