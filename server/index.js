@@ -227,6 +227,7 @@ app.use('/api/size-charts', sizeChartsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/banners', bannersRoutes);
+app.use('/api/reviews', reviewsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
