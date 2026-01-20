@@ -25,6 +25,10 @@ const productSectionSchema = new mongoose.Schema({
     enum: ['featured', 'carousel', 'grid', 'asymmetric'],
     default: 'asymmetric'
   },
+  backgroundImage: {
+    type: String,
+    default: null
+  },
   isActive: {
     type: Boolean,
     default: true
