@@ -191,6 +191,10 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Update product (admin)
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
+
     const {
       name,
       description,
