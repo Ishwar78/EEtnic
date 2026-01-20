@@ -147,6 +147,10 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized - Admin only' });
     }
 
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     const { status } = req.body;
 
     if (!status || !['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].includes(status)) {
