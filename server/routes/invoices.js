@@ -12,6 +12,10 @@ router.post('/:orderId', authMiddleware, async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ error: 'Invalid order ID' });
+    }
+
     // Check if invoice already exists
     let invoice = await Invoice.findOne({ orderId });
 
@@ -31,7 +35,7 @@ router.post('/:orderId', authMiddleware, async (req, res) => {
     }
 
     // Check authorization - only user who placed the order or admin
-    if (order.userId._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (order.userId._id.toString() !== req.user._id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
