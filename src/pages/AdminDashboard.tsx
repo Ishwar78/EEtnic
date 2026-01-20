@@ -34,6 +34,7 @@ import AdminTransactionManagement from "@/components/AdminTransactionManagement"
 import AdminReviewManagement from "@/components/AdminReviewManagement";
 import AdminOfferManagement from "@/components/AdminOfferManagement";
 import AdminCollectionManagement from "@/components/AdminCollectionManagement";
+import AdminProductSectionManagement from "@/components/AdminProductSectionManagement";
 
 interface DashboardStats {
   totalUsers: number;
