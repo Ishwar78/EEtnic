@@ -756,6 +756,11 @@ export default function AdminDashboard() {
               <AdminTicketManagement />
             </TabsContent>
 
+            {/* Reviews Tab */}
+            <TabsContent value="reviews" className="space-y-6">
+              <AdminReviewManagement />
+            </TabsContent>
+
             {/* Contact Tab */}
             <TabsContent value="contact" className="space-y-6">
               <AdminContactManagement />
