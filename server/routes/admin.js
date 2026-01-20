@@ -180,6 +180,10 @@ router.put('/users/:id', async (req, res) => {
 // Delete user
 router.delete('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const user = await User.findByIdAndDelete(req.params.id);
 
     if (!user) {
