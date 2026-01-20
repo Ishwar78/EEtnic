@@ -131,11 +131,15 @@ router.get('/users/:id', async (req, res) => {
 // Update user
 router.put('/users/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const { name, email, phone, address, role, isActive } = req.body;
 
     // Check email uniqueness if changed
     if (email) {
-      const existingUser = await User.findOne({ 
+      const existingUser = await User.findOne({
         email: email.toLowerCase(),
         _id: { $ne: req.params.id }
       });
