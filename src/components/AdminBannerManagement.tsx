@@ -118,6 +118,20 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
     }
   }, [category]);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string;
+        setImagePreview(base64);
+        setFormData(prev => ({ ...prev, imageUrl: base64 }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -130,6 +144,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
       isActive: true,
     });
     setEditingBanner(null);
+    setImageFile(null);
+    setImagePreview("");
   };
 
   const handleOpenDialog = (banner?: Banner) => {
