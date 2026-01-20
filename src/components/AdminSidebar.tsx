@@ -266,7 +266,6 @@ export default function AdminSidebar({ isOpen = true, onClose }: AdminSidebarPro
                             <Link
                               key={subItem.href}
                               to={subItem.href}
-                              target="_blank"
                               className={cn(
                                 "block px-3 py-1.5 rounded-md text-sm transition-colors",
                                 isActive(subItem.href)
@@ -283,7 +282,6 @@ export default function AdminSidebar({ isOpen = true, onClose }: AdminSidebarPro
                   ) : (
                     <Link
                       to={item.href || "#"}
-                      target="_blank"
                       className={cn(
                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                         isActive(item.href || "")

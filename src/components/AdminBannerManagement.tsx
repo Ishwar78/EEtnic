@@ -77,6 +77,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
     category: "bestsellers",
     isActive: true,
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -116,6 +118,20 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
     }
   }, [category]);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string;
+        setImagePreview(base64);
+        setFormData(prev => ({ ...prev, imageUrl: base64 }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -128,6 +144,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
       isActive: true,
     });
     setEditingBanner(null);
+    setImageFile(null);
+    setImagePreview("");
   };
 
   const handleOpenDialog = (banner?: Banner) => {
@@ -143,6 +161,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
         category: banner.category,
         isActive: banner.isActive,
       });
+      setImagePreview(banner.imageUrl);
+      setImageFile(null);
     } else {
       resetForm();
       // If viewing category-specific view, set the category
@@ -558,18 +578,61 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="imageUrl">Image URL *</Label>
-              <Input
-                id="imageUrl"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                placeholder="https://example.com/image.jpg"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Enter a complete image URL. For local images, upload to public folder and use /filename.jpg
-              </p>
+            <div className="space-y-4">
+              <Label htmlFor="imageFile">Banner Image *</Label>
+
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="relative w-full h-48 rounded-lg border-2 border-dashed border-gold/30 overflow-hidden bg-muted">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* File Upload */}
+              <div className="space-y-2">
+                <Label htmlFor="imageFile" className="text-sm font-medium">Upload Image</Label>
+                <input
+                  id="imageFile"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="w-full px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-muted transition-colors"
+                />
+                <p className="text-xs text-muted-foreground">
+                  JPG, PNG, GIF up to 5MB. Recommended size: 1200x600px
+                </p>
+              </div>
+
+              {/* OR Divider */}
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-border"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-background text-muted-foreground">OR</span>
+                </div>
+              </div>
+
+              {/* URL Input */}
+              <div className="space-y-2">
+                <Label htmlFor="imageUrl" className="text-sm font-medium">Image URL</Label>
+                <Input
+                  id="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={(e) => {
+                    setFormData({ ...formData, imageUrl: e.target.value });
+                    setImagePreview(e.target.value);
+                  }}
+                  placeholder="https://example.com/image.jpg"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Paste a complete image URL instead of uploading
+                </p>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
