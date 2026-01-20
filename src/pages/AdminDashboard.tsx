@@ -34,6 +34,7 @@ import AdminTransactionManagement from "@/components/AdminTransactionManagement"
 import AdminReviewManagement from "@/components/AdminReviewManagement";
 import AdminOfferManagement from "@/components/AdminOfferManagement";
 import AdminCollectionManagement from "@/components/AdminCollectionManagement";
+import AdminProductSectionManagement from "@/components/AdminProductSectionManagement";
 
 interface DashboardStats {
   totalUsers: number;
@@ -131,6 +132,7 @@ export default function AdminDashboard() {
     { value: 'videos', label: 'Trending Videos' },
     { value: 'offers', label: 'Offers' },
     { value: 'collections', label: 'Collections' },
+    { value: 'product-sections', label: 'Product Sections' },
     { value: 'products', label: 'Products' },
     { value: 'categories', label: 'Categories' },
     { value: 'coupons', label: 'Coupons' },
@@ -567,6 +569,11 @@ export default function AdminDashboard() {
             {/* Collections Tab */}
             <TabsContent value="collections" className="space-y-6">
               <AdminCollectionManagement />
+            </TabsContent>
+
+            {/* Product Sections Tab */}
+            <TabsContent value="product-sections" className="space-y-6">
+              <AdminProductSectionManagement />
             </TabsContent>
 
             {/* Products Tab */}
