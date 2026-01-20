@@ -77,6 +77,8 @@ export default function AdminBannerManagement({ category }: AdminBannerManagemen
     category: "bestsellers",
     isActive: true,
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
 
