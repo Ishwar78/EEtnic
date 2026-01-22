@@ -538,12 +538,12 @@ const AdminVideoManagement = () => {
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="w-24 h-16 rounded-lg overflow-hidden border border-border bg-black/10 flex items-center justify-center">
-                      {parseVideoSource(video.url).type === 'html5' ? (
+                      {video.url && parseVideoSource(String(video.url)).type === 'html5' ? (
                         <video
-                          src={video.url}
+                          src={typeof video.url === 'string' ? video.url : String(video.url)}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            handleVideoError(e, video.url);
+                            handleVideoError(e, String(video.url || ''));
                             const target = e.target as HTMLVideoElement;
                             target.style.display = 'none';
                           }}
