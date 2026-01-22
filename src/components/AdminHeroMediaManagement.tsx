@@ -482,11 +482,11 @@ export default function AdminHeroMediaManagement() {
                         ) : (
                           <>
                             <video
-                              src={item.mediaUrl}
+                              src={typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl)}
                               className="w-full h-full object-cover"
                               muted
                               onError={(e) => {
-                                handleVideoError(e, item.mediaUrl);
+                                handleVideoError(e, typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl));
                                 const target = e.currentTarget as HTMLVideoElement;
                                 target.style.display = 'none';
                               }}
