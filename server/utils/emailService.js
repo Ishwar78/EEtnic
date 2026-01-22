@@ -58,16 +58,16 @@ export function getSignupEmailTemplate(userName, userEmail) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Welcome to Vasstra</h1>
+          <h1>Welcome to ShreeradheKrishnacollection</h1>
           <p>Premium Ethnic Fashion</p>
         </div>
-        
+
         <div class="content">
           <h2>Hello ${userName},</h2>
-          <p>Thank you for registering with <strong>Vasstra</strong>! We're excited to have you on board.</p>
-          
+          <p>Thank you for registering with <strong>ShreeradheKrishnacollection</strong>! We're excited to have you on board.</p>
+
           <p>Your account has been successfully created with the email: <strong>${userEmail}</strong></p>
-          
+
           <p>You can now:</p>
           <ul>
             <li>Browse our exclusive collection of ethnic wear</li>
@@ -75,16 +75,16 @@ export function getSignupEmailTemplate(userName, userEmail) {
             <li>Place orders with ease</li>
             <li>Track your purchases</li>
           </ul>
-          
-          <p>If you have any questions or need assistance, feel free to contact us at <strong>support@vasstra.com</strong></p>
-          
+
+          <p>If you have any questions or need assistance, feel free to contact us at <strong>support@shreeradhekrishnacollection.com</strong></p>
+
           <p style="text-align: center; margin-top: 30px;">
             <a href="${process.env.FRONTEND_URL || 'http://localhost:8080'}/shop" class="button">Start Shopping</a>
           </p>
         </div>
-        
+
         <div class="footer">
-          <p>© 2024 Vasstra - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
           <p>This is an automated email, please do not reply to this address.</p>
         </div>
       </div>
