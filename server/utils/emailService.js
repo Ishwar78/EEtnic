@@ -248,36 +248,36 @@ export function getOrderConfirmedEmailTemplate(userName, orderId, orderAmount) {
           <h1>✓ Order Confirmed!</h1>
           <p>Your order has been confirmed</p>
         </div>
-        
+
         <div class="content">
           <h2>Hello ${userName},</h2>
-          
+
           <div class="success-info">
             <h3 style="margin-top: 0; color: #4a6741;">Your order has been confirmed!</h3>
             <p><strong>Order ID:</strong> #${orderId}</p>
             <p><strong>Order Total:</strong> ₹${orderAmount.toLocaleString('en-IN')}</p>
             <p><strong>Status:</strong> Confirmed - Processing for Shipment</p>
           </div>
-          
+
           <p>Your order is now being prepared for shipment. You will receive a tracking number via email as soon as your order ships.</p>
-          
+
           <h3>What's Next?</h3>
           <ul>
             <li>Your order is being packed with care</li>
             <li>You'll receive a shipping notification with tracking details</li>
             <li>Track your shipment in real-time</li>
           </ul>
-          
-          <p>If you have any questions about your order, please don't hesitate to reach out to us at <strong>support@vasstra.com</strong></p>
-          
+
+          <p>If you have any questions about your order, please don't hesitate to reach out to us at <strong>support@shreeradhekrishnacollection.com</strong></p>
+
           <p style="text-align: center; margin-top: 30px;">
             <a href="${process.env.FRONTEND_URL || 'http://localhost:8080'}/orders" class="button">Track Your Order</a>
           </p>
         </div>
-        
+
         <div class="footer">
-          <p>© 2024 Vasstra - Premium Ethnic Fashion. All rights reserved.</p>
-          <p>Thank you for shopping with Vasstra!</p>
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>Thank you for shopping with ShreeradheKrishnacollection!</p>
         </div>
       </div>
     </body>
@@ -308,30 +308,30 @@ export function getOrderShippedEmailTemplate(userName, orderId, trackingId, ship
         <div class="header">
           <h1>🚚 Your Order Has Shipped!</h1>
         </div>
-        
+
         <div class="content">
           <h2>Hello ${userName},</h2>
-          
+
           <p>Great news! Your order has been shipped and is on its way to you.</p>
-          
+
           <div class="shipping-info">
             <p><strong>Order ID:</strong> #${orderId}</p>
             <p><strong>Tracking ID:</strong> ${trackingId}</p>
             <p><strong>Shipping Provider:</strong> ${shippingProvider || 'Standard Shipping'}</p>
           </div>
-          
+
           <p>You can track your shipment in real-time using the tracking number above. Click the button below to view detailed tracking information.</p>
-          
+
           <p style="text-align: center; margin-top: 30px;">
             <a href="${process.env.FRONTEND_URL || 'http://localhost:8080'}/orders/track/${trackingId}" class="button">Track Shipment</a>
           </p>
-          
+
           <h3>Estimated Delivery</h3>
           <p>Your package should arrive within 5-7 business days. You'll receive an email notification when your order is delivered.</p>
         </div>
-        
+
         <div class="footer">
-          <p>© 2024 Vasstra - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
         </div>
       </div>
     </body>
