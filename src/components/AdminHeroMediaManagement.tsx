@@ -467,14 +467,14 @@ export default function AdminHeroMediaManagement() {
                 <div className="flex gap-4">
                   {/* Media Preview */}
                   <div className="w-32 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0 flex items-center justify-center relative group">
-                    {item.mediaType === 'video' ? (
+                    {item.mediaType === 'video' && item.mediaUrl ? (
                       <>
-                        {item.mediaUrl.includes('youtube.com') || item.mediaUrl.includes('youtu.be') ? (
+                        {String(item.mediaUrl).includes('youtube.com') || String(item.mediaUrl).includes('youtu.be') ? (
                           <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center gap-1">
                             <Play className="w-6 h-6 text-red-500" />
                             <span className="text-white text-xs font-medium">YouTube</span>
                           </div>
-                        ) : item.mediaUrl.includes('instagram.com') ? (
+                        ) : String(item.mediaUrl).includes('instagram.com') ? (
                           <div className="w-full h-full bg-pink-900/20 flex flex-col items-center justify-center gap-1">
                             <Play className="w-6 h-6 text-pink-500" />
                             <span className="text-white text-xs font-medium">Instagram</span>
@@ -482,11 +482,11 @@ export default function AdminHeroMediaManagement() {
                         ) : (
                           <>
                             <video
-                              src={item.mediaUrl}
+                              src={typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl)}
                               className="w-full h-full object-cover"
                               muted
                               onError={(e) => {
-                                handleVideoError(e, item.mediaUrl);
+                                handleVideoError(e, typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl));
                                 const target = e.currentTarget as HTMLVideoElement;
                                 target.style.display = 'none';
                               }}
@@ -499,7 +499,7 @@ export default function AdminHeroMediaManagement() {
                       </>
                     ) : (
                       <img
-                        src={item.mediaUrl}
+                        src={typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl || '')}
                         alt={item.title}
                         className="w-full h-full object-cover"
                         onError={(e) => {

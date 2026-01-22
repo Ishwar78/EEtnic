@@ -52,7 +52,11 @@ interface VideoPreviewProps {
 const VideoPreview = ({ url }: VideoPreviewProps) => {
   if (!url) return null;
 
-  const videoSource = parseVideoSource(url);
+  // Ensure url is a proper string
+  const validUrl = typeof url === 'string' ? url.trim() : String(url || '');
+  if (!validUrl) return null;
+
+  const videoSource = parseVideoSource(validUrl);
   const isYouTube = videoSource.type === 'youtube';
   const isVimeo = videoSource.type === 'vimeo';
   const isInstagram = videoSource.type === 'instagram';
@@ -88,7 +92,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
           <div className="text-center">
             <ExternalLink className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-sm font-medium">Instagram Preview</p>
-            <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
+            <a href={validUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
               Open in Instagram
             </a>
           </div>
@@ -99,7 +103,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
           <div className="text-center">
             <Play className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-sm font-medium">TikTok Video</p>
-            <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
+            <a href={validUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
               Open on TikTok
             </a>
           </div>
@@ -108,11 +112,11 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
       {isHtml5 && videoSource.directUrl && (
         <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border bg-black">
           <video
-            src={videoSource.directUrl}
+            src={typeof videoSource.directUrl === 'string' ? videoSource.directUrl : String(videoSource.directUrl)}
             className="w-full h-full object-cover"
             controls
             onError={(e) => {
-              handleVideoError(e, videoSource.directUrl);
+              handleVideoError(e, String(videoSource?.directUrl || ''));
               const target = e.target as HTMLVideoElement;
               target.style.display = 'none';
             }}
@@ -534,12 +538,12 @@ const AdminVideoManagement = () => {
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="w-24 h-16 rounded-lg overflow-hidden border border-border bg-black/10 flex items-center justify-center">
-                      {parseVideoSource(video.url).type === 'html5' ? (
+                      {video.url && parseVideoSource(String(video.url)).type === 'html5' ? (
                         <video
-                          src={video.url}
+                          src={typeof video.url === 'string' ? video.url : String(video.url)}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            handleVideoError(e, video.url);
+                            handleVideoError(e, String(video.url || ''));
                             const target = e.target as HTMLVideoElement;
                             target.style.display = 'none';
                           }}

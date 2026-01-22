@@ -140,14 +140,23 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => {
-  const videoSource = parseVideoSource(url);
+  // Ensure url is a string
+  const validUrl = typeof url === 'string' ? url : String(url || '');
+
+  if (!validUrl) {
+    console.warn('Invalid video URL provided to VideoPlayer');
+    return <div className="w-full h-full bg-gray-300" />;
+  }
+
+  const videoSource = parseVideoSource(validUrl);
   const videoType = videoSource.type;
 
   // For HTML5 videos - ensure autoplay when visible
   if (videoType === 'html5') {
+    const directUrl = videoSource.directUrl || validUrl;
     return (
       <video
-        src={videoSource.directUrl}
+        src={typeof directUrl === 'string' ? directUrl : String(directUrl)}
         autoPlay
         loop
         muted
@@ -158,9 +167,9 @@ const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => 
         }`}
         onLoadedData={onLoad}
         onCanPlay={onLoad}
-        onPlay={() => console.log('Video playing:', url)}
+        onPlay={() => console.log('Video playing:', validUrl)}
         onError={(e) => {
-          handleVideoError(e, videoSource.directUrl);
+          handleVideoError(e, directUrl);
         }}
       />
     );
@@ -294,20 +303,31 @@ const MediaShowcase = () => {
       
       if (data.videos && Array.isArray(data.videos) && data.videos.length > 0) {
         // Transform API videos to match expected format
-        const transformedVideos = data.videos.map((video: any) => ({
-          _id: video._id,
-          type: "video",
-          url: video.url,
-          category: video.category,
-          title: video.title,
-          price: video.price,
-          originalPrice: video.originalPrice,
-          badge: video.badge || null,
-          alt: video.description || video.title,
-          productId: video.productId,
-        }));
+        const transformedVideos = data.videos
+          .filter((video: any) => {
+            // Ensure video has a valid URL
+            const hasValidUrl = video.url && typeof video.url === 'string' && video.url.length > 0;
+            if (!hasValidUrl) {
+              console.warn('Skipping video with invalid URL:', video);
+            }
+            return hasValidUrl;
+          })
+          .map((video: any) => ({
+            _id: video._id,
+            type: "video",
+            url: String(video.url).trim(),
+            category: video.category || 'ETHNIC WEAR',
+            title: video.title || 'Video',
+            price: Number(video.price) || 0,
+            originalPrice: Number(video.originalPrice) || 0,
+            badge: video.badge || null,
+            alt: video.description || video.title || 'Product video',
+            productId: video.productId || '',
+          }));
 
-        setMediaItems(transformedVideos);
+        if (transformedVideos.length > 0) {
+          setMediaItems(transformedVideos);
+        }
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
