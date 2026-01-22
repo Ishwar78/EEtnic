@@ -1,7 +1,9 @@
 import express from 'express';
 import Order from '../models/Order.js';
+import User from '../models/User.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { isValidObjectId } from '../utils/validation.js';
+import { sendEmail, getOrderPlacedEmailTemplate, getOrderConfirmedEmailTemplate, getOrderShippedEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
