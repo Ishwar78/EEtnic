@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import { generateToken, authMiddleware } from '../middleware/auth.js';
+import { sendEmail, getSignupEmailTemplate, getSigninEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
