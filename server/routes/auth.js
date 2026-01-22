@@ -39,6 +39,15 @@ router.post('/signup', async (req, res) => {
 
     await user.save();
 
+    // Send signup email
+    const emailTemplate = getSignupEmailTemplate(name, email);
+    const emailResult = await sendEmail(email, '🎉 Welcome to Vasstra - Registration Successful', emailTemplate);
+
+    if (!emailResult.success) {
+      console.warn('⚠️ Signup email failed to send:', emailResult.error);
+      // Don't fail the signup just because email failed
+    }
+
     // Generate token
     const token = generateToken(user._id, user.role);
 
