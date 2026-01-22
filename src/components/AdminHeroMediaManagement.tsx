@@ -474,7 +474,7 @@ export default function AdminHeroMediaManagement() {
                             <Play className="w-6 h-6 text-red-500" />
                             <span className="text-white text-xs font-medium">YouTube</span>
                           </div>
-                        ) : item.mediaUrl.includes('instagram.com') ? (
+                        ) : String(item.mediaUrl).includes('instagram.com') ? (
                           <div className="w-full h-full bg-pink-900/20 flex flex-col items-center justify-center gap-1">
                             <Play className="w-6 h-6 text-pink-500" />
                             <span className="text-white text-xs font-medium">Instagram</span>
