@@ -140,14 +140,23 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => {
-  const videoSource = parseVideoSource(url);
+  // Ensure url is a string
+  const validUrl = typeof url === 'string' ? url : String(url || '');
+
+  if (!validUrl) {
+    console.warn('Invalid video URL provided to VideoPlayer');
+    return <div className="w-full h-full bg-gray-300" />;
+  }
+
+  const videoSource = parseVideoSource(validUrl);
   const videoType = videoSource.type;
 
   // For HTML5 videos - ensure autoplay when visible
   if (videoType === 'html5') {
+    const directUrl = videoSource.directUrl || validUrl;
     return (
       <video
-        src={videoSource.directUrl}
+        src={typeof directUrl === 'string' ? directUrl : String(directUrl)}
         autoPlay
         loop
         muted
@@ -158,9 +167,9 @@ const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => 
         }`}
         onLoadedData={onLoad}
         onCanPlay={onLoad}
-        onPlay={() => console.log('Video playing:', url)}
+        onPlay={() => console.log('Video playing:', validUrl)}
         onError={(e) => {
-          handleVideoError(e, videoSource.directUrl);
+          handleVideoError(e, directUrl);
         }}
       />
     );
