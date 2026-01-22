@@ -467,9 +467,9 @@ export default function AdminHeroMediaManagement() {
                 <div className="flex gap-4">
                   {/* Media Preview */}
                   <div className="w-32 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0 flex items-center justify-center relative group">
-                    {item.mediaType === 'video' ? (
+                    {item.mediaType === 'video' && item.mediaUrl ? (
                       <>
-                        {item.mediaUrl.includes('youtube.com') || item.mediaUrl.includes('youtu.be') ? (
+                        {String(item.mediaUrl).includes('youtube.com') || String(item.mediaUrl).includes('youtu.be') ? (
                           <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center gap-1">
                             <Play className="w-6 h-6 text-red-500" />
                             <span className="text-white text-xs font-medium">YouTube</span>
