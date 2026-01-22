@@ -41,7 +41,7 @@ router.post('/signup', async (req, res) => {
 
     // Send signup email
     const emailTemplate = getSignupEmailTemplate(name, email);
-    const emailResult = await sendEmail(email, '🎉 Welcome to Vasstra - Registration Successful', emailTemplate);
+    const emailResult = await sendEmail(email, '🎉 Welcome to ShreeradheKrishnacollection - Registration Successful', emailTemplate);
 
     if (!emailResult.success) {
       console.warn('⚠️ Signup email failed to send:', emailResult.error);
