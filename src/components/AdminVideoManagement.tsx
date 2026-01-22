@@ -52,7 +52,11 @@ interface VideoPreviewProps {
 const VideoPreview = ({ url }: VideoPreviewProps) => {
   if (!url) return null;
 
-  const videoSource = parseVideoSource(url);
+  // Ensure url is a proper string
+  const validUrl = typeof url === 'string' ? url.trim() : String(url || '');
+  if (!validUrl) return null;
+
+  const videoSource = parseVideoSource(validUrl);
   const isYouTube = videoSource.type === 'youtube';
   const isVimeo = videoSource.type === 'vimeo';
   const isInstagram = videoSource.type === 'instagram';
