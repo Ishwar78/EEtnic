@@ -141,7 +141,13 @@ interface VideoPlayerProps {
 
 const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => {
   // Ensure url is a string
-  const validUrl = typeof url === 'string' ? url : String(url || '');
+  let validUrl = '';
+  if (typeof url === 'string') {
+    validUrl = url.trim();
+  } else if (url && typeof url === 'object') {
+    console.warn('Video URL is an object, expected string:', url);
+    validUrl = '';
+  }
 
   if (!validUrl) {
     console.warn('Invalid video URL provided to VideoPlayer');
@@ -153,10 +159,10 @@ const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => 
 
   // For HTML5 videos - ensure autoplay when visible
   if (videoType === 'html5') {
-    const directUrl = videoSource.directUrl || validUrl;
+    const directUrl = String(videoSource.directUrl || validUrl);
     return (
       <video
-        src={typeof directUrl === 'string' ? directUrl : String(directUrl)}
+        src={directUrl}
         autoPlay
         loop
         muted
