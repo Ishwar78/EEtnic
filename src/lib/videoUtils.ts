@@ -242,16 +242,16 @@ export function handleVideoError(e: Event, url?: string | null): void {
 
   // Safely convert URL to string
   let safeUrl = '';
-  if (typeof url === 'string') {
+  if (typeof url === 'string' && url.length > 0) {
     safeUrl = url;
-  } else if (target.src && typeof target.src === 'string') {
+  } else if (target.src && typeof target.src === 'string' && target.src.length > 0) {
     safeUrl = target.src;
-  } else if (typeof url === 'object' && url !== null) {
-    safeUrl = String(url);
+  } else {
+    safeUrl = 'No valid URL provided';
   }
 
   console.error('Video load error:', errorMessage, {
-    url: safeUrl || 'Unknown',
+    url: safeUrl,
     code: target.error?.code,
     videoElement: target.currentSrc || 'No source',
   });
