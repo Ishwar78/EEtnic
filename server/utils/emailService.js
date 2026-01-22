@@ -178,17 +178,17 @@ export function getOrderPlacedEmailTemplate(userName, orderId, orderAmount, item
           <h1>Order Confirmed!</h1>
           <p>Thank you for your purchase</p>
         </div>
-        
+
         <div class="content">
           <h2>Hello ${userName},</h2>
           <p>Your order has been successfully placed. We're thrilled to have your business!</p>
-          
+
           <div class="order-info">
             <p><strong>Order ID:</strong> #${orderId}</p>
             <p><strong>Order Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p>
-            <p><strong>Status:</strong> Pending</p>
+            <p><strong>Status:</strong> Confirmed</p>
           </div>
-          
+
           <h3>Order Details</h3>
           <table>
             <thead>
@@ -203,20 +203,20 @@ export function getOrderPlacedEmailTemplate(userName, orderId, orderAmount, item
               ${itemsList}
             </tbody>
           </table>
-          
+
           <div class="order-info">
             <p style="text-align: right; font-size: 18px;"><strong>Total Amount: ₹${orderAmount.toLocaleString('en-IN')}</strong></p>
           </div>
-          
-          <p>You will receive another email once your order is confirmed and shipped.</p>
-          
+
+          <p>You will receive another email once your order is shipped.</p>
+
           <p style="text-align: center; margin-top: 30px;">
             <a href="${process.env.FRONTEND_URL || 'http://localhost:8080'}/orders" class="button">Track Order</a>
           </p>
         </div>
-        
+
         <div class="footer">
-          <p>© 2024 Vasstra - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
         </div>
       </div>
     </body>
