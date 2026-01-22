@@ -21,6 +21,7 @@ async function seedData() {
     await Product.deleteMany({});
     await Category.deleteMany({});
     await Video.deleteMany({});
+    await ProductSection.deleteMany({});
     await Coupon.deleteMany({});
 
     // Create categories
