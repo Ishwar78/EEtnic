@@ -61,6 +61,16 @@ router.post('/', authMiddleware, async (req, res) => {
 
     await order.save();
 
+    // Send order placed email
+    try {
+      const emailTemplate = getOrderPlacedEmailTemplate(req.user.name, order._id, totalAmount, order.items);
+      await sendEmail(req.user.email, '🎉 Order Placed Successfully - Vasstra', emailTemplate);
+      console.log('✅ Order placed email sent to:', req.user.email);
+    } catch (emailError) {
+      console.warn('⚠️ Failed to send order email:', emailError.message);
+      // Don't fail the order creation if email fails
+    }
+
     res.status(201).json({
       success: true,
       order,
