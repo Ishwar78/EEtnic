@@ -306,6 +306,39 @@ async function seedData() {
     ]);
     console.log(`✅ Created ${videos.length} videos`);
 
+    // Create product sections
+    console.log('📦 Creating product sections...');
+    const sections = await ProductSection.insertMany([
+      {
+        name: 'featured-collection',
+        heading: 'Featured Collection',
+        subheading: 'Hand-picked pieces for you',
+        productIds: products.slice(0, 4).map(p => p._id),
+        displayLayout: 'grid',
+        isActive: true,
+        displayOrder: 1,
+      },
+      {
+        name: 'bestsellers',
+        heading: 'Bestsellers',
+        subheading: 'Most loved by our customers',
+        productIds: products.filter(p => p.isBestseller).map(p => p._id),
+        displayLayout: 'asymmetric',
+        isActive: true,
+        displayOrder: 2,
+      },
+      {
+        name: 'new-arrivals',
+        heading: 'New Arrivals',
+        subheading: 'Fresh styles just in',
+        productIds: products.filter(p => p.isNewProduct).map(p => p._id),
+        displayLayout: 'carousel',
+        isActive: true,
+        displayOrder: 3,
+      },
+    ]);
+    console.log(`✅ Created ${sections.length} product sections`);
+
     // Create coupons
     console.log('🎟️ Creating coupons...');
     const now = new Date();
