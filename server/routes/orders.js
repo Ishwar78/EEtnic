@@ -173,10 +173,35 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
       req.params.id,
       { status, updatedAt: new Date() },
       { new: true }
-    );
+    ).populate('userId', 'name email');
 
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Send status update email
+    try {
+      const userData = order.userId;
+      if (userData && userData.email) {
+        let emailTemplate;
+        let emailSubject;
+
+        if (status === 'confirmed') {
+          emailTemplate = getOrderConfirmedEmailTemplate(userData.name, order._id, order.totalAmount);
+          emailSubject = '✓ Order Confirmed - Vasstra';
+        } else if (status === 'shipped') {
+          emailTemplate = getOrderShippedEmailTemplate(userData.name, order._id, order.trackingId || order._id, 'Standard Shipping');
+          emailSubject = '🚚 Your Order Has Shipped - Vasstra';
+        }
+
+        if (emailTemplate) {
+          await sendEmail(userData.email, emailSubject, emailTemplate);
+          console.log(`✅ Order ${status} email sent to:`, userData.email);
+        }
+      }
+    } catch (emailError) {
+      console.warn('⚠️ Failed to send status update email:', emailError.message);
+      // Don't fail the order update if email fails
     }
 
     res.json({
