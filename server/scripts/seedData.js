@@ -4,6 +4,7 @@ import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import Video from '../models/Video.js';
 import Coupon from '../models/Coupon.js';
+import ProductSection from '../models/ProductSection.js';
 
 dotenv.config();
 
