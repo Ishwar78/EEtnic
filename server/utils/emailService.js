@@ -113,14 +113,14 @@ export function getSigninEmailTemplate(userName, userEmail, timestamp) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Vasstra - Sign In Confirmation</h1>
+          <h1>ShreeradheKrishnacollection - Sign In Confirmation</h1>
         </div>
-        
+
         <div class="content">
           <h2>Hello ${userName},</h2>
-          
-          <p>We've detected a sign-in to your Vasstra account.</p>
-          
+
+          <p>We've detected a sign-in to your ShreeradheKrishnacollection account.</p>
+
           <div class="alert">
             <p><strong>Sign-In Details:</strong></p>
             <ul style="margin: 10px 0;">
@@ -128,14 +128,14 @@ export function getSigninEmailTemplate(userName, userEmail, timestamp) {
               <li><strong>Time:</strong> ${new Date(timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</li>
             </ul>
           </div>
-          
+
           <p>If this wasn't you, please change your password immediately.</p>
-          
-          <p style="margin-top: 20px;">Best regards,<br><strong>Vasstra Team</strong></p>
+
+          <p style="margin-top: 20px;">Best regards,<br><strong>ShreeradheKrishnacollection Team</strong></p>
         </div>
-        
+
         <div class="footer">
-          <p>© 2024 Vasstra - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
         </div>
       </div>
     </body>
