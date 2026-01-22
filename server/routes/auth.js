@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
 
     // Send login notification email
     const emailTemplate = getSigninEmailTemplate(user.name, user.email, new Date());
-    const emailResult = await sendEmail(user.email, '🔐 Vasstra - Sign In Notification', emailTemplate);
+    const emailResult = await sendEmail(user.email, '🔐 ShreeradheKrishnacollection - Sign In Notification', emailTemplate);
 
     if (!emailResult.success) {
       console.warn('⚠️ Login notification email failed to send:', emailResult.error);
