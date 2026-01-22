@@ -499,7 +499,7 @@ export default function AdminHeroMediaManagement() {
                       </>
                     ) : (
                       <img
-                        src={item.mediaUrl}
+                        src={typeof item.mediaUrl === 'string' ? item.mediaUrl : String(item.mediaUrl || '')}
                         alt={item.title}
                         className="w-full h-full object-cover"
                         onError={(e) => {
