@@ -236,12 +236,23 @@ export function getVideoErrorMessage(error: MediaError | null, url?: string): st
 /**
  * Handle video load error with proper logging
  */
-export function handleVideoError(e: Event, url?: string): void {
+export function handleVideoError(e: Event, url?: string | null): void {
   const target = e.target as HTMLVideoElement;
-  const errorMessage = getVideoErrorMessage(target.error, url);
+  const errorMessage = getVideoErrorMessage(target.error, url || undefined);
+
+  // Safely convert URL to string
+  let safeUrl = '';
+  if (typeof url === 'string') {
+    safeUrl = url;
+  } else if (target.src && typeof target.src === 'string') {
+    safeUrl = target.src;
+  } else if (typeof url === 'object' && url !== null) {
+    safeUrl = String(url);
+  }
 
   console.error('Video load error:', errorMessage, {
-    url: url || target.src,
+    url: safeUrl || 'Unknown',
     code: target.error?.code,
+    videoElement: target.currentSrc || 'No source',
   });
 }
