@@ -205,13 +205,13 @@ export default function HeroSlider() {
               ) : isHtml5Video && videoSource?.directUrl ? (
                 <>
                   <video
-                    src={videoSource.directUrl}
+                    src={typeof videoSource.directUrl === 'string' ? videoSource.directUrl : String(videoSource.directUrl)}
                     autoPlay
                     muted
                     loop
                     playsInline
                     onError={(e) => {
-                      handleVideoError(e, videoSource.directUrl);
+                      handleVideoError(e, String(videoSource?.directUrl || ''));
                     }}
                     className="absolute inset-0 w-full h-full object-cover transform origin-left md:skew-x-[-6deg] md:translate-x-12 scale-110"
                   />
