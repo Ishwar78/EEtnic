@@ -4,11 +4,11 @@ const bannerSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      default: '',
     },
     subtitle: {
       type: String,
-      required: true,
+      default: '',
     },
     description: {
       type: String,
@@ -24,7 +24,7 @@ const bannerSchema = new mongoose.Schema(
     },
     ctaLink: {
       type: String,
-      required: true,
+      default: '',
     },
     category: {
       type: String,

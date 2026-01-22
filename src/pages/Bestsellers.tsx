@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 export default function Bestsellers() {
   const [bestsellers, setBestsellers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { banner } = useBanner("bestseller");
+  const { banner } = useBanner("bestsellers");
 
   useEffect(() => {
     const fetchProducts = async () => {
