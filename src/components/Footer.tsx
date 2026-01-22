@@ -61,17 +61,17 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
               <span className="font-display text-3xl font-bold tracking-wide">
-                Vasstra
+                ShreeradheKrishnacollection
               </span>
             </Link>
             <p className="text-primary-foreground/70 mb-6 max-w-sm">
-              Celebrating the rich heritage of Indian ethnic wear with contemporary designs. 
+              Celebrating the rich heritage of Indian ethnic wear with contemporary designs.
               Each piece tells a story of tradition and elegance.
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-primary-foreground/70">
                 <MapPin className="h-5 w-5 text-gold" />
-                <span>123 Fashion Street, Mumbai, India</span>
+                <span>Mumbai, India</span>
               </div>
               <div className="flex items-center gap-3 text-primary-foreground/70">
                 <Phone className="h-5 w-5 text-gold" />
@@ -79,7 +79,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-3 text-primary-foreground/70">
                 <Mail className="h-5 w-5 text-gold" />
-                <span>hello@vasstra.com</span>
+                <span>shreeradhekrishnacollection2@gmail.com</span>
               </div>
               <div className="flex items-center gap-3 text-primary-foreground/70">
                 <Clock className="h-5 w-5 text-gold" />

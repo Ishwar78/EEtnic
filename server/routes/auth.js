@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import { generateToken, authMiddleware } from '../middleware/auth.js';
+import { sendEmail, getSignupEmailTemplate, getSigninEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -37,6 +38,15 @@ router.post('/signup', async (req, res) => {
     });
 
     await user.save();
+
+    // Send signup email
+    const emailTemplate = getSignupEmailTemplate(name, email);
+    const emailResult = await sendEmail(email, '🎉 Welcome to ShreeradheKrishnacollection - Registration Successful', emailTemplate);
+
+    if (!emailResult.success) {
+      console.warn('⚠️ Signup email failed to send:', emailResult.error);
+      // Don't fail the signup just because email failed
+    }
 
     // Generate token
     const token = generateToken(user._id, user.role);
@@ -77,6 +87,15 @@ router.post('/login', async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Send login notification email
+    const emailTemplate = getSigninEmailTemplate(user.name, user.email, new Date());
+    const emailResult = await sendEmail(user.email, '🔐 ShreeradheKrishnacollection - Sign In Notification', emailTemplate);
+
+    if (!emailResult.success) {
+      console.warn('⚠️ Login notification email failed to send:', emailResult.error);
+      // Don't fail the login just because email failed
     }
 
     // Generate token

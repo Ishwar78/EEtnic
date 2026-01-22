@@ -141,7 +141,13 @@ interface VideoPlayerProps {
 
 const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => {
   // Ensure url is a string
-  const validUrl = typeof url === 'string' ? url : String(url || '');
+  let validUrl = '';
+  if (typeof url === 'string') {
+    validUrl = url.trim();
+  } else if (url && typeof url === 'object') {
+    console.warn('Video URL is an object, expected string:', url);
+    validUrl = '';
+  }
 
   if (!validUrl) {
     console.warn('Invalid video URL provided to VideoPlayer');
@@ -153,10 +159,10 @@ const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => 
 
   // For HTML5 videos - ensure autoplay when visible
   if (videoType === 'html5') {
-    const directUrl = videoSource.directUrl || validUrl;
+    const directUrl = String(videoSource.directUrl || validUrl);
     return (
       <video
-        src={typeof directUrl === 'string' ? directUrl : String(directUrl)}
+        src={directUrl}
         autoPlay
         loop
         muted
@@ -300,34 +306,49 @@ const MediaShowcase = () => {
       }
 
       const data = await response.json();
-      
+
       if (data.videos && Array.isArray(data.videos) && data.videos.length > 0) {
         // Transform API videos to match expected format
         const transformedVideos = data.videos
           .filter((video: any) => {
             // Ensure video has a valid URL
-            const hasValidUrl = video.url && typeof video.url === 'string' && video.url.length > 0;
-            if (!hasValidUrl) {
-              console.warn('Skipping video with invalid URL:', video);
+            if (!video.url) {
+              console.warn('Skipping video with missing URL:', video);
+              return false;
             }
-            return hasValidUrl;
+
+            const urlString = String(video.url).trim();
+            if (!urlString || urlString.length === 0 || urlString === '[object Object]') {
+              console.warn('Skipping video with invalid URL value:', { url: urlString, video });
+              return false;
+            }
+
+            return true;
           })
-          .map((video: any) => ({
-            _id: video._id,
-            type: "video",
-            url: String(video.url).trim(),
-            category: video.category || 'ETHNIC WEAR',
-            title: video.title || 'Video',
-            price: Number(video.price) || 0,
-            originalPrice: Number(video.originalPrice) || 0,
-            badge: video.badge || null,
-            alt: video.description || video.title || 'Product video',
-            productId: video.productId || '',
-          }));
+          .map((video: any) => {
+            const urlString = String(video.url).trim();
+            return {
+              _id: video._id,
+              type: "video",
+              url: urlString,
+              category: String(video.category || 'ETHNIC WEAR').trim(),
+              title: String(video.title || 'Video').trim(),
+              price: Number(video.price) || 0,
+              originalPrice: Number(video.originalPrice) || 0,
+              badge: video.badge || null,
+              alt: String(video.description || video.title || 'Product video').trim(),
+              productId: String(video.productId || '').trim(),
+            };
+          });
 
         if (transformedVideos.length > 0) {
+          console.log(`Loaded ${transformedVideos.length} videos from API`);
           setMediaItems(transformedVideos);
+        } else {
+          console.warn('No valid videos found in API response, using fallback videos');
         }
+      } else {
+        console.warn('No videos returned from API, using fallback videos');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

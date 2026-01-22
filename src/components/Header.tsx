@@ -97,10 +97,10 @@ export default function Header() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <span className="font-display text-2xl md:text-3xl font-bold text-primary tracking-wide">
-                Vasstra
+                ShreeradheKrishnacollection
               </span>
               <span className="hidden sm:block text-gold text-xs font-body tracking-widest uppercase">
-                Ethnic Elegance
+                Premium Ethnic Fashion
               </span>
             </Link>
 

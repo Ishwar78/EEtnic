@@ -1,7 +1,9 @@
 import express from 'express';
 import Order from '../models/Order.js';
+import User from '../models/User.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { isValidObjectId } from '../utils/validation.js';
+import { sendEmail, getOrderPlacedEmailTemplate, getOrderConfirmedEmailTemplate, getOrderShippedEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -27,6 +29,12 @@ router.post('/', authMiddleware, async (req, res) => {
 
     if (!paymentMethod) {
       return res.status(400).json({ error: 'Payment method is required' });
+    }
+
+    // Fetch user data for email
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
     const order = new Order({
@@ -58,6 +66,20 @@ router.post('/', authMiddleware, async (req, res) => {
     });
 
     await order.save();
+
+    // Send order placed email
+    try {
+      const emailTemplate = getOrderPlacedEmailTemplate(user.name, order._id, totalAmount, order.items);
+      const emailResult = await sendEmail(user.email, '🎉 Order Placed Successfully - ShreeradheKrishnacollection', emailTemplate);
+      if (emailResult.success) {
+        console.log('✅ Order placed email sent to:', user.email);
+      } else {
+        console.warn('⚠️ Failed to send order email:', emailResult.error);
+      }
+    } catch (emailError) {
+      console.warn('⚠️ Error sending order email:', emailError.message);
+      // Don't fail the order creation if email fails
+    }
 
     res.status(201).json({
       success: true,
@@ -161,10 +183,35 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
       req.params.id,
       { status, updatedAt: new Date() },
       { new: true }
-    );
+    ).populate('userId', 'name email');
 
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Send status update email
+    try {
+      const userData = order.userId;
+      if (userData && userData.email) {
+        let emailTemplate;
+        let emailSubject;
+
+        if (status === 'confirmed') {
+          emailTemplate = getOrderConfirmedEmailTemplate(userData.name, order._id, order.totalAmount);
+          emailSubject = '✓ Order Confirmed - Vasstra';
+        } else if (status === 'shipped') {
+          emailTemplate = getOrderShippedEmailTemplate(userData.name, order._id, order.trackingId || order._id, 'Standard Shipping');
+          emailSubject = '🚚 Your Order Has Shipped - Vasstra';
+        }
+
+        if (emailTemplate) {
+          await sendEmail(userData.email, emailSubject, emailTemplate);
+          console.log(`✅ Order ${status} email sent to:`, userData.email);
+        }
+      }
+    } catch (emailError) {
+      console.warn('⚠️ Failed to send status update email:', emailError.message);
+      // Don't fail the order update if email fails
     }
 
     res.json({
