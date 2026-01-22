@@ -92,7 +92,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
           <div className="text-center">
             <ExternalLink className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-sm font-medium">Instagram Preview</p>
-            <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
+            <a href={validUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
               Open in Instagram
             </a>
           </div>
@@ -103,7 +103,7 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
           <div className="text-center">
             <Play className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-sm font-medium">TikTok Video</p>
-            <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
+            <a href={validUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1">
               Open on TikTok
             </a>
           </div>
@@ -112,11 +112,11 @@ const VideoPreview = ({ url }: VideoPreviewProps) => {
       {isHtml5 && videoSource.directUrl && (
         <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border bg-black">
           <video
-            src={videoSource.directUrl}
+            src={typeof videoSource.directUrl === 'string' ? videoSource.directUrl : String(videoSource.directUrl)}
             className="w-full h-full object-cover"
             controls
             onError={(e) => {
-              handleVideoError(e, videoSource.directUrl);
+              handleVideoError(e, String(videoSource?.directUrl || ''));
               const target = e.target as HTMLVideoElement;
               target.style.display = 'none';
             }}
