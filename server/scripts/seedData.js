@@ -404,6 +404,7 @@ async function seedData() {
     console.log(`   ✅ Categories: ${categories.length}`);
     console.log(`   ✅ Products: ${products.length}`);
     console.log(`   ✅ Videos: ${videos.length}`);
+    console.log(`   ✅ Product Sections: ${sections.length}`);
     console.log(`   ✅ Coupons: ${coupons.length}`);
     console.log('');
     console.log('Available Coupon Codes:');
