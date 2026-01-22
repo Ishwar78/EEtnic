@@ -131,7 +131,9 @@ export default function HeroSlider() {
     >
       {/* Background Slides */}
       {slides.map((slide, index) => {
-        const mediaUrl = slide.mediaUrl || slide.image;
+        // Ensure mediaUrl is a string
+        const rawMediaUrl = slide.mediaUrl || slide.image;
+        const mediaUrl = typeof rawMediaUrl === 'string' ? rawMediaUrl.trim() : '';
         const isVideoType = slide.mediaType === 'video';
         const isGifType = slide.mediaType === 'gif';
         const videoSource = isVideoType && mediaUrl ? getVideoSource(mediaUrl) : null;
