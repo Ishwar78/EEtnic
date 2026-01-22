@@ -89,6 +89,15 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    // Send login notification email
+    const emailTemplate = getSigninEmailTemplate(user.name, user.email, new Date());
+    const emailResult = await sendEmail(user.email, '🔐 Vasstra - Sign In Notification', emailTemplate);
+
+    if (!emailResult.success) {
+      console.warn('⚠️ Login notification email failed to send:', emailResult.error);
+      // Don't fail the login just because email failed
+    }
+
     // Generate token
     const token = generateToken(user._id, user.role);
 
