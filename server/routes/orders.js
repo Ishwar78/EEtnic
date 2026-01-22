@@ -31,6 +31,12 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Payment method is required' });
     }
 
+    // Fetch user data for email
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     const order = new Order({
       userId: req.user._id,
       items: items.map(item => ({
@@ -63,11 +69,15 @@ router.post('/', authMiddleware, async (req, res) => {
 
     // Send order placed email
     try {
-      const emailTemplate = getOrderPlacedEmailTemplate(req.user.name, order._id, totalAmount, order.items);
-      await sendEmail(req.user.email, '🎉 Order Placed Successfully - Vasstra', emailTemplate);
-      console.log('✅ Order placed email sent to:', req.user.email);
+      const emailTemplate = getOrderPlacedEmailTemplate(user.name, order._id, totalAmount, order.items);
+      const emailResult = await sendEmail(user.email, '🎉 Order Placed Successfully - ShreeradheKrishnacollection', emailTemplate);
+      if (emailResult.success) {
+        console.log('✅ Order placed email sent to:', user.email);
+      } else {
+        console.warn('⚠️ Failed to send order email:', emailResult.error);
+      }
     } catch (emailError) {
-      console.warn('⚠️ Failed to send order email:', emailError.message);
+      console.warn('⚠️ Error sending order email:', emailError.message);
       // Don't fail the order creation if email fails
     }
 
