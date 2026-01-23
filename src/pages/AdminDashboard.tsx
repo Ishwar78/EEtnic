@@ -130,6 +130,7 @@ export default function AdminDashboard() {
   const tabs = [
     { value: 'overview', label: 'Overview' },
     { value: 'hero-media', label: 'Hero Slider' },
+    { value: 'section-settings', label: 'Section Settings' },
     { value: 'videos', label: 'Trending Videos' },
     { value: 'offers', label: 'Offers' },
     { value: 'collections', label: 'Collections' },
