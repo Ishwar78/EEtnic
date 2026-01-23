@@ -25,14 +25,13 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { name: "Home", href: "/" },
   { name: "Bestsellers", href: "/bestsellers" },
-  { name: "New Arrivals", href: "/new-arrivals" },
-  { 
-    name: "Ethnic Wear", 
+  {
+    name: "Ethnic Wear",
     href: "/ethnic-wear",
     submenu: ethnicSubcategories
   },
-  { 
-    name: "Western Wear", 
+  {
+    name: "Western Wear",
     href: "/western-wear",
     submenu: westernSubcategories
   },
@@ -95,11 +94,11 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <span className="font-display text-2xl md:text-3xl font-bold text-primary tracking-wide">
+            <Link to="/" className="flex flex-col items-start">
+              <span className="font-display text-2xl md:text-3xl font-bold text-primary tracking-wide leading-tight">
                 ShreeradheKrishnacollection
               </span>
-              <span className="hidden sm:block text-gold text-xs font-body tracking-widest uppercase">
+              <span className="text-gold text-xs font-body tracking-widest uppercase">
                 Premium Ethnic Fashion
               </span>
             </Link>

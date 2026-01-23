@@ -143,7 +143,8 @@ const AdminVideoManagement = () => {
     originalPrice: "",
     badge: "",
     isActive: true,
-    productId: ""
+    productId: "",
+    order: "0"
   });
 
   // Load videos on mount
@@ -194,6 +195,7 @@ const AdminVideoManagement = () => {
         badge: formData.badge && formData.badge !== 'none' ? formData.badge : null,
         isActive: formData.isActive,
         productId: formData.productId,
+        order: parseInt(formData.order) || 0,
       };
 
       if (editingVideo?._id) {
@@ -251,7 +253,8 @@ const AdminVideoManagement = () => {
       originalPrice: "",
       badge: "",
       isActive: true,
-      productId: ""
+      productId: "",
+      order: "0"
     });
     setEditingVideo(null);
     setIsDialogOpen(false);
@@ -268,7 +271,8 @@ const AdminVideoManagement = () => {
       originalPrice: video.originalPrice.toString(),
       badge: video.badge || "",
       isActive: video.isActive,
-      productId: video.productId
+      productId: video.productId,
+      order: video.order?.toString() || "0"
     });
     setIsDialogOpen(true);
   };
@@ -455,6 +459,20 @@ const AdminVideoManagement = () => {
                   onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
                   placeholder="MongoDB ID or custom ID"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="order">Display Order (Scroll Position)</Label>
+                <Input
+                  id="order"
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: e.target.value })}
+                  placeholder="0"
+                  min="0"
+                  step="1"
+                />
+                <p className="text-xs text-muted-foreground">Lower numbers appear first in the carousel</p>
               </div>
 
               <div className="flex items-center gap-2">

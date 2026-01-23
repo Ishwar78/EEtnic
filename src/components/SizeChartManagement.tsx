@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2, Edit2, Trash2, Plus } from "lucide-react";
+import { Loader2, Edit2, Trash2, Plus, Upload, X } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Measurement {
@@ -24,6 +24,7 @@ interface SizeChart {
   productId: string;
   sizes: Size[];
   unit: 'cm' | 'inches';
+  chartImage?: string | null;
 }
 
 interface Product {
@@ -44,6 +45,7 @@ export default function SizeChartManagement() {
   const [unit, setUnit] = useState<'cm' | 'inches'>('cm');
   const [sizes, setSizes] = useState<Size[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [chartImage, setChartImage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     sizeLabel: "",
     measurements: [{ name: "", value: "" }],
@@ -99,10 +101,12 @@ export default function SizeChartManagement() {
         setSizeChart(data.sizeChart);
         setSizes(data.sizeChart.sizes || []);
         setUnit(data.sizeChart.unit || 'cm');
+        setChartImage(data.sizeChart.chartImage || null);
       } else {
         setSizeChart(null);
         setSizes([]);
         setUnit('cm');
+        setChartImage(null);
       }
     } catch (error) {
       console.error('Error fetching size chart:', error);
@@ -203,6 +207,51 @@ export default function SizeChartManagement() {
     }));
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Error",
+        description: "Please upload an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Error",
+        description: "File size must be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string;
+        setChartImage(base64);
+        toast({
+          title: "Success",
+          description: "Image uploaded successfully",
+        });
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleRemoveMeasurement = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -240,6 +289,7 @@ export default function SizeChartManagement() {
         body: JSON.stringify({
           sizes,
           unit,
+          chartImage: chartImage || null,
         }),
       });
 
@@ -332,6 +382,50 @@ export default function SizeChartManagement() {
                     <SelectItem value="inches">Inches</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="chart-image">Size Chart Image (Optional)</Label>
+                <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                  {chartImage ? (
+                    <div className="space-y-2">
+                      <img
+                        src={chartImage}
+                        alt="Size Chart"
+                        className="max-h-48 mx-auto rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setChartImage(null)}
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Remove Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                      <Label htmlFor="chart-image" className="cursor-pointer">
+                        <span className="text-sm font-medium text-primary hover:underline">
+                          Click to upload
+                        </span>
+                        <span className="text-xs text-muted-foreground"> or drag and drop</span>
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        PNG, JPG, GIF up to 5MB
+                      </p>
+                      <Input
+                        id="chart-image"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {isLoading ? (
