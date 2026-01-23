@@ -461,6 +461,20 @@ const AdminVideoManagement = () => {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="order">Display Order (Scroll Position)</Label>
+                <Input
+                  id="order"
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: e.target.value })}
+                  placeholder="0"
+                  min="0"
+                  step="1"
+                />
+                <p className="text-xs text-muted-foreground">Lower numbers appear first in the carousel</p>
+              </div>
+
               <div className="flex items-center gap-2">
                 <Switch
                   checked={formData.isActive}
