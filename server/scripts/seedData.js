@@ -310,13 +310,31 @@ async function seedData() {
     console.log('📦 Creating product sections...');
     const sections = await ProductSection.insertMany([
       {
+        name: 'diwali-sale',
+        heading: 'Diwali Sale Collection',
+        subheading: 'Celebrate with special festive discounts',
+        productIds: products.slice(0, 6).map(p => p._id),
+        displayLayout: 'grid',
+        isActive: true,
+        displayOrder: 0,
+      },
+      {
+        name: 'holi-sale',
+        heading: 'Holi Festival Collection',
+        subheading: 'Colorful ethnic wear for the festival of colors',
+        productIds: products.slice(3, 9).map(p => p._id),
+        displayLayout: 'grid',
+        isActive: true,
+        displayOrder: 1,
+      },
+      {
         name: 'featured-collection',
         heading: 'Featured Collection',
         subheading: 'Hand-picked pieces for you',
         productIds: products.slice(0, 4).map(p => p._id),
         displayLayout: 'grid',
         isActive: true,
-        displayOrder: 1,
+        displayOrder: 2,
       },
       {
         name: 'bestsellers',
@@ -325,7 +343,7 @@ async function seedData() {
         productIds: products.filter(p => p.isBestseller).map(p => p._id),
         displayLayout: 'asymmetric',
         isActive: true,
-        displayOrder: 2,
+        displayOrder: 3,
       },
       {
         name: 'new-arrivals',
@@ -334,7 +352,7 @@ async function seedData() {
         productIds: products.filter(p => p.isNewProduct).map(p => p._id),
         displayLayout: 'carousel',
         isActive: true,
-        displayOrder: 3,
+        displayOrder: 4,
       },
     ]);
     console.log(`✅ Created ${sections.length} product sections`);
