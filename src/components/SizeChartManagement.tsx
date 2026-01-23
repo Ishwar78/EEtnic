@@ -384,6 +384,50 @@ export default function SizeChartManagement() {
                 </Select>
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="chart-image">Size Chart Image (Optional)</Label>
+                <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                  {chartImage ? (
+                    <div className="space-y-2">
+                      <img
+                        src={chartImage}
+                        alt="Size Chart"
+                        className="max-h-48 mx-auto rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setChartImage(null)}
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Remove Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                      <Label htmlFor="chart-image" className="cursor-pointer">
+                        <span className="text-sm font-medium text-primary hover:underline">
+                          Click to upload
+                        </span>
+                        <span className="text-xs text-muted-foreground"> or drag and drop</span>
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        PNG, JPG, GIF up to 5MB
+                      </p>
+                      <Input
+                        id="chart-image"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {isLoading ? (
                 <div className="flex justify-center py-8">
                   <Loader2 className="h-6 w-6 animate-spin" />
