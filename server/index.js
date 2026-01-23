@@ -235,6 +235,7 @@ app.use('/api/reviews', reviewsRoutes);
 app.use('/api/offers', offersRoutes);
 app.use('/api/collections', collectionsRoutes);
 app.use('/api/product-sections', productSectionsRoutes);
+app.use('/api/section-settings', sectionSettingsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
