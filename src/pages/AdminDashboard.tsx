@@ -35,6 +35,7 @@ import AdminReviewManagement from "@/components/AdminReviewManagement";
 import AdminOfferManagement from "@/components/AdminOfferManagement";
 import AdminCollectionManagement from "@/components/AdminCollectionManagement";
 import AdminProductSectionManagement from "@/components/AdminProductSectionManagement";
+import AdminSectionSettingsManagement from "@/components/AdminSectionSettingsManagement";
 
 interface DashboardStats {
   totalUsers: number;
@@ -129,6 +130,7 @@ export default function AdminDashboard() {
   const tabs = [
     { value: 'overview', label: 'Overview' },
     { value: 'hero-media', label: 'Hero Slider' },
+    { value: 'section-settings', label: 'Section Settings' },
     { value: 'videos', label: 'Trending Videos' },
     { value: 'offers', label: 'Offers' },
     { value: 'collections', label: 'Collections' },
@@ -554,6 +556,11 @@ export default function AdminDashboard() {
             {/* Hero Media Tab */}
             <TabsContent value="hero-media" className="space-y-6">
               <AdminHeroMediaManagement />
+            </TabsContent>
+
+            {/* Section Settings Tab */}
+            <TabsContent value="section-settings" className="space-y-6">
+              <AdminSectionSettingsManagement />
             </TabsContent>
 
             {/* Videos Tab */}

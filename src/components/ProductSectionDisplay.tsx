@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
+import SectionHeader from "./SectionHeader";
 
 interface Product {
   _id: string;
@@ -215,20 +216,12 @@ const ProductSectionDisplay = ({ sectionName }: ProductSectionDisplayProps) => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-3 ${
-            section.backgroundImage ? 'text-white drop-shadow-lg' : 'text-foreground'
-          }`}>
-            {section.heading}
-          </h2>
-          {section.subheading && (
-            <p className={`text-lg ${
-              section.backgroundImage ? 'text-white/90 drop-shadow' : 'text-muted-foreground'
-            }`}>
-              {section.subheading}
-            </p>
-          )}
-        </div>
+        <SectionHeader
+          sectionKey={section.name}
+          defaultTitle={section.heading}
+          defaultSubtitle={section.subheading}
+          defaultPattern="elegant"
+        />
 
         {/* Products Layout */}
         {renderLayout()}

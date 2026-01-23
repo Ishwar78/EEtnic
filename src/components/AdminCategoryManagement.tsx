@@ -260,14 +260,18 @@ const AdminCategoryManagement = () => {
           <h2 className="text-2xl font-bold">Category Management</h2>
           <p className="text-muted-foreground">Manage product categories and subcategories</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => resetForm()}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Category
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
+        <Button onClick={() => {
+          resetForm();
+          setIsDialogOpen(true);
+        }}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Category
+        </Button>
+      </div>
+
+      {/* Dialog for Add/Edit Category */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingCategory ? "Edit Category" : "Add New Category"}
@@ -374,9 +378,8 @@ const AdminCategoryManagement = () => {
                 </Button>
               </div>
             </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
