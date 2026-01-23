@@ -271,7 +271,8 @@ const AdminVideoManagement = () => {
       originalPrice: video.originalPrice.toString(),
       badge: video.badge || "",
       isActive: video.isActive,
-      productId: video.productId
+      productId: video.productId,
+      order: video.order?.toString() || "0"
     });
     setIsDialogOpen(true);
   };
