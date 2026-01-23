@@ -195,6 +195,7 @@ const AdminVideoManagement = () => {
         badge: formData.badge && formData.badge !== 'none' ? formData.badge : null,
         isActive: formData.isActive,
         productId: formData.productId,
+        order: parseInt(formData.order) || 0,
       };
 
       if (editingVideo?._id) {
