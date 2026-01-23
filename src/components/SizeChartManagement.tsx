@@ -45,6 +45,7 @@ export default function SizeChartManagement() {
   const [unit, setUnit] = useState<'cm' | 'inches'>('cm');
   const [sizes, setSizes] = useState<Size[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [chartImage, setChartImage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     sizeLabel: "",
     measurements: [{ name: "", value: "" }],
