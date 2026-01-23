@@ -198,10 +198,13 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
 
         if (status === 'confirmed') {
           emailTemplate = getOrderConfirmedEmailTemplate(userData.name, order._id, order.totalAmount);
-          emailSubject = '✓ Order Confirmed - Vasstra';
+          emailSubject = '✓ Order Confirmed - ShreeradheKrishnacollection';
         } else if (status === 'shipped') {
           emailTemplate = getOrderShippedEmailTemplate(userData.name, order._id, order.trackingId || order._id, 'Standard Shipping');
-          emailSubject = '🚚 Your Order Has Shipped - Vasstra';
+          emailSubject = '🚚 Your Order Has Shipped - ShreeradheKrishnacollection';
+        } else if (status === 'delivered') {
+          emailTemplate = getOrderDeliveredEmailTemplate(userData.name, order._id);
+          emailSubject = '✓ Your Order Has Been Delivered - ShreeradheKrishnacollection';
         }
 
         if (emailTemplate) {
