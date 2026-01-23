@@ -558,6 +558,11 @@ export default function AdminDashboard() {
               <AdminHeroMediaManagement />
             </TabsContent>
 
+            {/* Section Settings Tab */}
+            <TabsContent value="section-settings" className="space-y-6">
+              <AdminSectionSettingsManagement />
+            </TabsContent>
+
             {/* Videos Tab */}
             <TabsContent value="videos" className="space-y-6">
               <AdminVideoManagement />
