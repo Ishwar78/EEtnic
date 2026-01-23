@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
+import SectionHeader from "./SectionHeader";
 
 interface Product {
   _id: string;
