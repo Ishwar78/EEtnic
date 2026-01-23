@@ -30,6 +30,10 @@ const sizeChartSchema = new mongoose.Schema({
     enum: ['cm', 'inches'],
     default: 'cm'
   },
+  chartImage: {
+    type: String,
+    default: null // URL of the uploaded size chart image
+  },
   createdAt: {
     type: Date,
     default: Date.now
