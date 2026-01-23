@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import QuickViewModal from "@/components/QuickViewModal";
+import SectionHeader from "@/components/SectionHeader";
 import { Product } from "@/data/products";
 import { normalizeProduct } from "@/lib/normalizeProduct";
 
