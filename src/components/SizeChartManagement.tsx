@@ -24,6 +24,7 @@ interface SizeChart {
   productId: string;
   sizes: Size[];
   unit: 'cm' | 'inches';
+  chartImage?: string | null;
 }
 
 interface Product {
