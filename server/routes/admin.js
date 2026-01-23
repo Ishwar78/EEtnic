@@ -6,6 +6,7 @@ import PaymentSettings from '../models/PaymentSettings.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
 import { isValidObjectId } from '../utils/validation.js';
 import bcrypt from 'bcryptjs';
+import { sendEmail, getOrderConfirmedEmailTemplate, getOrderShippedEmailTemplate, getOrderDeliveredEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
