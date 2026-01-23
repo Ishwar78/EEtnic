@@ -11,7 +11,24 @@ router.get('/', async (req, res) => {
     const sections = await ProductSection.find({ isActive: true })
       .populate('productIds')
       .sort({ displayOrder: 1 });
-    
+
+    res.json({
+      success: true,
+      sections,
+    });
+  } catch (error) {
+    console.error('Error fetching product sections:', error);
+    res.status(500).json({ error: 'Failed to fetch product sections' });
+  }
+});
+
+// Get all sections (admin - including inactive) - MUST BE BEFORE /:id
+router.get('/admin/all', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const sections = await ProductSection.find()
+      .populate('productIds')
+      .sort({ displayOrder: 1 });
+
     res.json({
       success: true,
       sections,
@@ -71,23 +88,6 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching product section:', error);
     res.status(500).json({ error: 'Failed to fetch product section' });
-  }
-});
-
-// Get all sections (admin - including inactive)
-router.get('/admin/all', authMiddleware, adminMiddleware, async (req, res) => {
-  try {
-    const sections = await ProductSection.find()
-      .populate('productIds')
-      .sort({ displayOrder: 1 });
-
-    res.json({
-      success: true,
-      sections,
-    });
-  } catch (error) {
-    console.error('Error fetching product sections:', error);
-    res.status(500).json({ error: 'Failed to fetch product sections' });
   }
 });
 
