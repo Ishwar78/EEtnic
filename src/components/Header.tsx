@@ -25,14 +25,13 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { name: "Home", href: "/" },
   { name: "Bestsellers", href: "/bestsellers" },
-  { name: "New Arrivals", href: "/new-arrivals" },
-  { 
-    name: "Ethnic Wear", 
+  {
+    name: "Ethnic Wear",
     href: "/ethnic-wear",
     submenu: ethnicSubcategories
   },
-  { 
-    name: "Western Wear", 
+  {
+    name: "Western Wear",
     href: "/western-wear",
     submenu: westernSubcategories
   },
