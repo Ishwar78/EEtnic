@@ -253,7 +253,8 @@ const AdminVideoManagement = () => {
       originalPrice: "",
       badge: "",
       isActive: true,
-      productId: ""
+      productId: "",
+      order: "0"
     });
     setEditingVideo(null);
     setIsDialogOpen(false);
