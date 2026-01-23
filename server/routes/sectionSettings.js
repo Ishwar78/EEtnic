@@ -81,6 +81,25 @@ router.put('/:sectionKey', authMiddleware, adminMiddleware, async (req, res) => 
   }
 });
 
+// Admin: Delete section settings
+router.delete('/:sectionKey', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const section = await SectionSettings.findOneAndDelete({ sectionKey: req.params.sectionKey });
+
+    if (!section) {
+      return res.status(404).json({ error: 'Section settings not found' });
+    }
+
+    res.json({
+      success: true,
+      message: 'Section settings deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting section settings:', error);
+    res.status(500).json({ error: 'Failed to delete section settings' });
+  }
+});
+
 // Admin: Initialize default section settings
 router.post('/initialize/defaults', authMiddleware, adminMiddleware, async (req, res) => {
   try {
