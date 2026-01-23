@@ -289,6 +289,7 @@ export default function SizeChartManagement() {
         body: JSON.stringify({
           sizes,
           unit,
+          chartImage: chartImage || null,
         }),
       });
 
