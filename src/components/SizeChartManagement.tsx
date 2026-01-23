@@ -101,10 +101,12 @@ export default function SizeChartManagement() {
         setSizeChart(data.sizeChart);
         setSizes(data.sizeChart.sizes || []);
         setUnit(data.sizeChart.unit || 'cm');
+        setChartImage(data.sizeChart.chartImage || null);
       } else {
         setSizeChart(null);
         setSizes([]);
         setUnit('cm');
+        setChartImage(null);
       }
     } catch (error) {
       console.error('Error fetching size chart:', error);
