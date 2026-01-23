@@ -19,6 +19,7 @@ import reviewsRoutes from './routes/reviews.js';
 import offersRoutes from './routes/offers.js';
 import collectionsRoutes from './routes/collections.js';
 import productSectionsRoutes from './routes/productSections.js';
+import sectionSettingsRoutes from './routes/sectionSettings.js';
 import User from './models/User.js';
 import Contact from './models/Contact.js';
 import HeroMedia from './models/HeroMedia.js';
@@ -234,6 +235,7 @@ app.use('/api/reviews', reviewsRoutes);
 app.use('/api/offers', offersRoutes);
 app.use('/api/collections', collectionsRoutes);
 app.use('/api/product-sections', productSectionsRoutes);
+app.use('/api/section-settings', sectionSettingsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

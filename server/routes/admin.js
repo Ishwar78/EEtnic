@@ -6,6 +6,7 @@ import PaymentSettings from '../models/PaymentSettings.js';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
 import { isValidObjectId } from '../utils/validation.js';
 import bcrypt from 'bcryptjs';
+import { sendEmail, getOrderConfirmedEmailTemplate, getOrderShippedEmailTemplate, getOrderDeliveredEmailTemplate } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -332,6 +333,33 @@ router.put('/orders/:id', async (req, res) => {
 
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Send status update email
+    if (status && order.userId && order.userId.email) {
+      try {
+        let emailTemplate;
+        let emailSubject;
+
+        if (status === 'confirmed') {
+          emailTemplate = getOrderConfirmedEmailTemplate(order.userId.name, order._id, order.totalAmount);
+          emailSubject = '✓ Order Confirmed - ShreeradheKrishnacollection';
+        } else if (status === 'shipped') {
+          emailTemplate = getOrderShippedEmailTemplate(order.userId.name, order._id, trackingId || order._id, 'Standard Shipping');
+          emailSubject = '🚚 Your Order Has Shipped - ShreeradheKrishnacollection';
+        } else if (status === 'delivered') {
+          emailTemplate = getOrderDeliveredEmailTemplate(order.userId.name, order._id);
+          emailSubject = '✓ Your Order Has Been Delivered - ShreeradheKrishnacollection';
+        }
+
+        if (emailTemplate) {
+          await sendEmail(order.userId.email, emailSubject, emailTemplate);
+          console.log(`✅ Order ${status} email sent to:`, order.userId.email);
+        }
+      } catch (emailError) {
+        console.warn('⚠️ Failed to send status update email:', emailError.message);
+        // Don't fail the order update if email fails
+      }
     }
 
     res.json({

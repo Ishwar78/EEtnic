@@ -339,6 +339,67 @@ export function getOrderShippedEmailTemplate(userName, orderId, trackingId, ship
   `;
 }
 
+/**
+ * Email template: Order Delivered
+ */
+export function getOrderDeliveredEmailTemplate(userName, orderId) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f7f4; }
+        .header { background-color: #2e7d32; color: white; padding: 20px; text-align: center; border-radius: 5px; }
+        .content { background-color: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .footer { text-align: center; color: #666; font-size: 12px; padding: 10px; }
+        .delivery-info { background-color: #c8e6c9; padding: 15px; border-left: 4px solid #2e7d32; border-radius: 3px; margin: 15px 0; }
+        .button { background-color: #d4a574; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>✓ Your Order Has Been Delivered!</h1>
+        </div>
+
+        <div class="content">
+          <h2>Hello ${userName},</h2>
+
+          <p>Wonderful news! Your order has been successfully delivered to your address.</p>
+
+          <div class="delivery-info">
+            <p><strong>Order ID:</strong> #${orderId}</p>
+            <p><strong>Status:</strong> Delivered ✓</p>
+            <p><strong>Delivery Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p>
+          </div>
+
+          <h3>Thank You!</h3>
+          <p>We hope you love your purchase! Your satisfaction is our priority.</p>
+
+          <h3>Share Your Feedback</h3>
+          <p>We'd love to hear about your experience! Please take a moment to rate and review the products you received.</p>
+
+          <p style="text-align: center; margin-top: 30px;">
+            <a href="${process.env.FRONTEND_URL || 'http://localhost:8080'}/orders" class="button">View Order Details</a>
+          </p>
+
+          <h3>Need Help?</h3>
+          <p>If you have any issues with your order or need to return an item, please contact us at <strong>support@shreeradhekrishnacollection.com</strong> or call us at <strong>+91 98765 43210</strong>.</p>
+
+          <p>Thank you for shopping with <strong>ShreeradheKrishnacollection</strong>!</p>
+        </div>
+
+        <div class="footer">
+          <p>© 2024 ShreeradheKrishnacollection - Premium Ethnic Fashion. All rights reserved.</p>
+          <p>We appreciate your business!</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 export default {
   sendEmail,
   getSignupEmailTemplate,
@@ -346,4 +407,5 @@ export default {
   getOrderPlacedEmailTemplate,
   getOrderConfirmedEmailTemplate,
   getOrderShippedEmailTemplate,
+  getOrderDeliveredEmailTemplate,
 };
