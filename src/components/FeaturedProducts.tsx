@@ -206,17 +206,12 @@ export default function FeaturedProducts() {
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <span className="text-gold font-medium tracking-widest uppercase text-sm">
-            Curated for You
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-2 mb-4">
-            Featured Products
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Handpicked styles that define elegance and tradition
-          </p>
-        </div>
+        <SectionHeader
+          sectionKey="featured-products"
+          defaultTitle="Featured Products"
+          defaultSubtitle="Handpicked styles that define elegance and tradition"
+          defaultPattern="elegant"
+        />
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
