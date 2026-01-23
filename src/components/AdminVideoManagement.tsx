@@ -143,7 +143,8 @@ const AdminVideoManagement = () => {
     originalPrice: "",
     badge: "",
     isActive: true,
-    productId: ""
+    productId: "",
+    order: "0"
   });
 
   // Load videos on mount
