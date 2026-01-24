@@ -36,6 +36,7 @@ import AdminOfferManagement from "@/components/AdminOfferManagement";
 import AdminCollectionManagement from "@/components/AdminCollectionManagement";
 import AdminProductSectionManagement from "@/components/AdminProductSectionManagement";
 import AdminSectionSettingsManagement from "@/components/AdminSectionSettingsManagement";
+import AdminFilterManagement from "@/components/AdminFilterManagement";
 
 interface DashboardStats {
   totalUsers: number;
