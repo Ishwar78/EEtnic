@@ -14,6 +14,7 @@ import sizeChartsRoutes from './routes/sizeCharts.js';
 import ordersRoutes from './routes/orders.js';
 import invoicesRoutes from './routes/invoices.js';
 import videosRoutes from './routes/videos.js';
+import sidebarVideosRoutes from './routes/sidebarVideos.js';
 import bannersRoutes from './routes/banners.js';
 import reviewsRoutes from './routes/reviews.js';
 import offersRoutes from './routes/offers.js';
