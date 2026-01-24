@@ -133,6 +133,7 @@ export default function AdminDashboard() {
     { value: 'hero-media', label: 'Hero Slider' },
     { value: 'section-settings', label: 'Section Settings' },
     { value: 'videos', label: 'Trending Videos' },
+    { value: 'filters', label: 'Filters' },
     { value: 'offers', label: 'Offers' },
     { value: 'collections', label: 'Collections' },
     { value: 'product-sections', label: 'Product Sections' },
