@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Edit, Trash2, Play, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Play, Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { parseVideoSource, handleVideoError } from "@/lib/videoUtils";
