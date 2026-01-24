@@ -172,6 +172,52 @@ const AdminSidebarVideoManagement = () => {
       order: "0"
     });
     setEditingVideo(null);
+    setUploadMode('url');
+    setUploadProgress(0);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+    if (!validTypes.includes(file.type)) {
+      toast.error('Invalid file type. Please upload MP4, WebM, OGG, or MOV files.');
+      return;
+    }
+
+    // Validate file size (max 100MB)
+    const maxSize = 100 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('File is too large. Maximum size is 100MB.');
+      return;
+    }
+
+    // Convert file to base64
+    const reader = new FileReader();
+    let loadProgress = 0;
+
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        loadProgress = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(loadProgress);
+      }
+    };
+
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      setFormData({ ...formData, videoUrl: base64, videoType: 'html5' });
+      setUploadProgress(0);
+      toast.success(`Video uploaded: ${file.name}`);
+    };
+
+    reader.onerror = () => {
+      toast.error('Failed to read file');
+      setUploadProgress(0);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleEdit = (video: SidebarVideo) => {
