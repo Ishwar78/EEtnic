@@ -570,6 +570,11 @@ export default function AdminDashboard() {
               <AdminVideoManagement />
             </TabsContent>
 
+            {/* Filters Tab */}
+            <TabsContent value="filters" className="space-y-6">
+              <AdminFilterManagement />
+            </TabsContent>
+
             {/* Offers Tab */}
             <TabsContent value="offers" className="space-y-6">
               <AdminOfferManagement />
