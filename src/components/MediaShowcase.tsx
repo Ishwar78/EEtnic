@@ -326,7 +326,18 @@ const MediaShowcase = () => {
               return false;
             }
 
-            const urlString = String(video.url).trim();
+            // Convert URL to string and trim
+            let urlString = '';
+            if (typeof video.url === 'string') {
+              urlString = video.url.trim();
+            } else if (video.url && typeof video.url === 'object') {
+              // Log but skip object URLs
+              console.warn('Skipping video with object URL (not a string):', { video });
+              return false;
+            } else {
+              urlString = String(video.url).trim();
+            }
+
             if (!urlString || urlString.length === 0 || urlString === '[object Object]') {
               console.warn('Skipping video with invalid URL value:', { url: urlString, video });
               return false;
@@ -335,7 +346,14 @@ const MediaShowcase = () => {
             return true;
           })
           .map((video: any) => {
-            const urlString = String(video.url).trim();
+            // Ensure URL is a string
+            let urlString = '';
+            if (typeof video.url === 'string') {
+              urlString = video.url.trim();
+            } else {
+              urlString = String(video.url).trim();
+            }
+
             return {
               _id: video._id,
               type: "video",
