@@ -245,11 +245,8 @@ export function handleVideoError(e: Event, url?: string | null): void {
   if (typeof url === 'string' && url.length > 0) {
     safeUrl = url;
   } else if (url && typeof url === 'object') {
-    try {
-      safeUrl = JSON.stringify(url);
-    } catch (e) {
-      safeUrl = '[object Object]';
-    }
+    // Don't log object URLs - they're invalid and will appear as [object Object]
+    safeUrl = 'Invalid URL (object provided)';
   } else if (target.src && typeof target.src === 'string' && target.src.length > 0) {
     safeUrl = target.src;
   } else {
