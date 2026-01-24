@@ -50,7 +50,7 @@ const AdminSidebarVideoManagement = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('url');
   const [uploadProgress, setUploadProgress] = useState(0);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
