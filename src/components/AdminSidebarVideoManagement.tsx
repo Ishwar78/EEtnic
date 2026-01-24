@@ -336,20 +336,91 @@ const AdminSidebarVideoManagement = () => {
                 />
               </div>
 
-              {/* Video URL */}
+              {/* Upload Mode Toggle */}
               <div className="space-y-2">
-                <Label>Video URL / Link *</Label>
-                <Textarea
-                  value={formData.videoUrl}
-                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  placeholder="Paste video URL (YouTube, Vimeo, direct MP4 link, etc.)"
-                  rows={2}
-                  required
-                />
-                <p className="text-xs text-muted-foreground">
-                  Supports: Direct MP4/WebM links, YouTube, Vimeo, Instagram, TikTok URLs
-                </p>
+                <Label>Video Source *</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={uploadMode === 'file' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setUploadMode('file')}
+                    className="flex-1"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload File
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={uploadMode === 'url' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setUploadMode('url')}
+                    className="flex-1"
+                  >
+                    Link/URL
+                  </Button>
+                </div>
               </div>
+
+              {/* File Upload */}
+              {uploadMode === 'file' && (
+                <div className="space-y-2">
+                  <Label>Upload Video File *</Label>
+                  <div className="border-2 border-dashed border-border rounded-lg p-4 text-center bg-muted/50 hover:bg-muted transition-colors">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.ogg,.mov"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full"
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <Upload className="w-8 h-8 text-muted-foreground" />
+                        <div>
+                          <p className="font-medium text-foreground">Click to upload video</p>
+                          <p className="text-xs text-muted-foreground">or drag and drop</p>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  {uploadProgress > 0 && uploadProgress < 100 && (
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-primary h-2 rounded-full transition-all"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  )}
+                  {formData.videoUrl && uploadMode === 'file' && (
+                    <p className="text-xs text-green-600 font-medium">✓ Video uploaded successfully</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Supported: MP4, WebM, OGG, MOV (Max 100MB)
+                  </p>
+                </div>
+              )}
+
+              {/* Video URL / Link */}
+              {uploadMode === 'url' && (
+                <div className="space-y-2">
+                  <Label>Video URL / Link *</Label>
+                  <Textarea
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="Paste video URL (YouTube, Vimeo, direct MP4 link, etc.)"
+                    rows={2}
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Supports: Direct MP4/WebM links, YouTube, Vimeo, Instagram, TikTok URLs
+                  </p>
+                </div>
+              )}
 
               {/* Video Type */}
               <div className="space-y-2">
