@@ -72,6 +72,7 @@ const frontendPages: SidebarItem[] = [
 const adminSections: SidebarItem[] = [
   { title: "Overview", icon: BarChart3, href: "/admin?tab=overview" },
   { title: "Hero Slider", icon: Film, href: "/admin?tab=hero-media" },
+  { title: "Floating Sidebar Video", icon: Video, href: "/admin?tab=sidebar-videos" },
   { title: "Filters", icon: Sliders, href: "/admin?tab=filters" },
   { title: "Products", icon: ShoppingBag, href: "/admin?tab=products" },
   { title: "Categories", icon: Layers, href: "/admin?tab=categories" },
