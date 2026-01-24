@@ -240,10 +240,16 @@ export function handleVideoError(e: Event, url?: string | null): void {
   const target = e.target as HTMLVideoElement;
   const errorMessage = getVideoErrorMessage(target.error, url || undefined);
 
-  // Safely convert URL to string
+  // Safely convert URL to string - handle objects
   let safeUrl = '';
   if (typeof url === 'string' && url.length > 0) {
     safeUrl = url;
+  } else if (url && typeof url === 'object') {
+    try {
+      safeUrl = JSON.stringify(url);
+    } catch (e) {
+      safeUrl = '[object Object]';
+    }
   } else if (target.src && typeof target.src === 'string' && target.src.length > 0) {
     safeUrl = target.src;
   } else {

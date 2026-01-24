@@ -131,12 +131,27 @@ export default function HeroSlider() {
     >
       {/* Background Slides */}
       {slides.map((slide, index) => {
-        // Ensure mediaUrl is a string
+        // Ensure mediaUrl is a string - handle various invalid formats
         const rawMediaUrl = slide.mediaUrl || slide.image;
-        const mediaUrl = typeof rawMediaUrl === 'string' ? rawMediaUrl.trim() : '';
+        let mediaUrl = '';
+
+        if (typeof rawMediaUrl === 'string') {
+          mediaUrl = rawMediaUrl.trim();
+        } else if (rawMediaUrl && typeof rawMediaUrl === 'object') {
+          // Try to safely convert object to string
+          try {
+            const stringified = JSON.stringify(rawMediaUrl);
+            if (stringified && stringified !== '[object Object]') {
+              mediaUrl = stringified;
+            }
+          } catch (e) {
+            console.warn('Failed to convert mediaUrl object:', rawMediaUrl);
+          }
+        }
+
         const isVideoType = slide.mediaType === 'video';
         const isGifType = slide.mediaType === 'gif';
-        const videoSource = isVideoType && mediaUrl ? getVideoSource(mediaUrl) : null;
+        const videoSource = isVideoType && mediaUrl && mediaUrl !== '[object Object]' ? getVideoSource(mediaUrl) : null;
         const isYouTube = videoSource?.type === 'youtube';
         const isInstagram = videoSource?.type === 'instagram';
         const isVimeo = videoSource?.type === 'vimeo';

@@ -140,17 +140,26 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer = ({ url, isLoaded, onLoad, isHovered }: VideoPlayerProps) => {
-  // Ensure url is a string
+  // Ensure url is a string - handle various invalid formats
   let validUrl = '';
+
   if (typeof url === 'string') {
     validUrl = url.trim();
   } else if (url && typeof url === 'object') {
-    console.warn('Video URL is an object, expected string:', url);
-    validUrl = '';
+    // Try to stringify it safely
+    try {
+      const stringified = JSON.stringify(url);
+      if (stringified && stringified !== '[object Object]') {
+        validUrl = stringified;
+        console.warn('Video URL was an object but converted to:', validUrl);
+      }
+    } catch (e) {
+      console.warn('Failed to convert video URL object:', url);
+    }
   }
 
-  if (!validUrl) {
-    console.warn('Invalid video URL provided to VideoPlayer');
+  if (!validUrl || validUrl === '[object Object]') {
+    console.warn('Invalid or empty video URL provided to VideoPlayer:', { url, validUrl });
     return <div className="w-full h-full bg-gray-300" />;
   }
 
