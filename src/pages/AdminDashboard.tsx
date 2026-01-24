@@ -571,6 +571,11 @@ export default function AdminDashboard() {
               <AdminVideoManagement />
             </TabsContent>
 
+            {/* Sidebar Videos Tab */}
+            <TabsContent value="sidebar-videos" className="space-y-6">
+              <AdminSidebarVideoManagement />
+            </TabsContent>
+
             {/* Filters Tab */}
             <TabsContent value="filters" className="space-y-6">
               <AdminFilterManagement />
